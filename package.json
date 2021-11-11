@@ -1,0 +1,16 @@
+{
+  "name": "moire-effect",
+  "version": "1.0.0",
+  "description": "",
+  "source": "index.html",
+  "type": "module",
+  "scripts": {
+    "start": "node --experimental-modules node_modules/parcel/lib/bin.js",
+    "build": "parcel build"
+  },
+  "author": "Jennifer Juan",
+  "license": "ISC",
+  "devDependencies": {
+    "parcel": "^2.0.1"
+  }
+}

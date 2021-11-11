@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Moire Effect</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.1/TweenMax.min.js"></script>
+
+  <link rel="stylesheet" href="./main.css">
+</head>
+
+<body>
+  <div class="wrapper">
+    <!-- <div class="picture picture-a"></div>
+    <div class="picture picture-b"></div> -->
+  </div>
+</body>
+
+<script>
+  // sine wave example: https://codepen.io/lnked/embed/aXzPgx/?theme-id=modal
+  // sine wave morie effect: https://www.maxfordham.com/research-innovation/moire-screens/
+  // morie effect assets: https://www.pinterest.com/pin/55943220361989141/
+  // mouse move example: https://codepen.io/jenya/pen/BayZGMq 
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+  let wrapperDom = document.querySelector('.wrapper');
+  wrapperDom.style.width = width + 'px';
+  wrapperDom.style.height = height + 'px';
+  
+  const pictureDomLeftWrapper = document.createElement('div');
+  const pictureDomRightWrapper = document.createElement('div');
+  const pictureDomLeft = document.createElement('div');
+  const pictureDomRight = document.createElement('div');
+  
+  // const diameter = 2 * Math.pow((Math.pow(width, 2) + Math.pow(height/2, 2)), .5);
+  const diameter = 500;
+  pictureDomLeftWrapper.className = 'picture-wrapper';
+  pictureDomLeftWrapper.style.left = 0;
+  pictureDomLeft.className = 'picture rotate';
+  pictureDomLeft.style.width = diameter + 'px';
+  pictureDomLeft.style.height = diameter + 'px';
+  pictureDomRightWrapper.className = 'picture-wrapper';
+  pictureDomRightWrapper.style.left = '100%';
+  pictureDomRight.className = 'picture';
+  pictureDomRight.style.width = diameter + 'px';
+  pictureDomRight.style.height = diameter + 'px';
+  pictureDomLeftWrapper.append(pictureDomLeft);
+  pictureDomRightWrapper.append(pictureDomRight);
+  wrapperDom.append(pictureDomLeftWrapper);
+  wrapperDom.append(pictureDomRightWrapper);
+
+  const generatePicture = (dom) => {
+    dom.style.display = 'flex';
+    dom.style.justifyContent = 'space-between';
+    const lineWidth = 10;
+    for(let i=0; i<diameter/(lineWidth*1.8); i++) {
+      const lineDom = document.createElement('div');
+      lineDom.style.width = lineWidth + 'px';
+      lineDom.style.height = '100%';
+      dom.append(lineDom)
+    }
+  }
+  generatePicture(pictureDomLeft);
+  generatePicture(pictureDomRight);
+</script>
+
+</html>

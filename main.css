@@ -1,0 +1,57 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+.wrapper {
+  background-color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.picture-wrapper {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.picture {
+  
+  transform-origin: 50% 50%;
+  will-change: transform;
+}
+
+.picture > div {
+  background-color: grey;
+}
+
+.rotate {
+  animation: rotation 100s linear infinite;
+}
+.rotate-reverse {
+  animation: rotation 100s linear reverse infinite;
+}
+
+.move-vert {
+  animation: move-vert 100s linear infinite;
+}
+.move-hori {
+  animation: move-hori 100s linear infinite;
+}
+
+@keyframes rotation {
+  0% {transform: rotate(0deg);}
+  100% {transform: rotate(360deg);}
+}
+
+@keyframes move-vert {
+  0% { transform: translate(0, 0); }
+  50% { transform: translate(0, -50%); }
+  100% { transform: translate(0, 0); }
+}
+
+@keyframes move-hori {
+  0% { transform: translate(0, 0); }
+  50% { transform: translate(-50%, 0); }
+  100% { transform: translate(0, 0); }
+}

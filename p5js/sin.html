@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Moire Effect</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.5.1/dat.gui.min.js"></script>
+    <script src="./p5.min.js"></script>
+
+    <link rel="stylesheet" href="./main.css">
+  </head>
+
+  <body>
+    <canvas id="c"></canvas>
+    <div class="wrapper">
+      <h1>Moiré effect is everywhere.</h1>
+    </div>
+  </body>
+
+  <script>
+    let opts = {
+      // rot: 3,
+      rot: 2.8,
+      ampl: 40,
+    };
+    let canvas = document.getElementById("c");
+    let ctx = canvas.getContext("2d");
+    let cw = canvas.width = window.innerWidth, cx = cw / 2;
+    let ch = canvas.height = window.innerHeight, cy = ch / 2;
+
+    function setup() {
+      frameRate(12)
+      // let gui = new dat.GUI();
+      // gui.add(opts, 'rot', 0, 6.28).step(0.01).onChange(draw);
+      // gui.add(opts, 'ampl', 0, 100).onChange(draw);
+
+      noCanvas()
+      ctx.lineWidth = 4;
+
+      var grad = ctx.createLinearGradient(-cw/2, ch/2, cw/2, -ch/2);
+      grad.addColorStop(0, "rgba(255, 100, 100, 0.2)");
+      grad.addColorStop(0.3, "rgba(255, 255, 255, 0.1)");
+      grad.addColorStop(0.7, "rgba(255, 255, 255, 0.1)");
+      grad.addColorStop(1, "rgba(100, 100, 255, 0.4)");
+      ctx.strokeStyle = grad;
+
+      // ctx.strokeStyle = `rgba(255, 255, 255, 0.2)`
+
+      ctx.translate(cx, cy);
+    }
+
+    function draw() {   
+      const counter = frameCount/40
+      ctx.clearRect(-cw, -ch, 2*cw, 2*ch);
+      // ctx.save()
+      // ctx.translate(cx, cy);
+      sineLines(counter);
+      // ctx.rotate(opts.rot);
+      // sineLines(counter);
+      // ctx.restore()
+    }
+
+    function sineLines(offset) {
+      let yOffset = 0;
+      for(let y = -ch-opts.ampl; y < ch; y += 40){
+        let xOffset = offset;
+        ctx.save()
+        
+        ctx.beginPath();
+        for(let x = -cw; x < cw; x += 1.5) {
+          let _y = sin(xOffset) * opts.ampl + y
+          ctx.lineTo(x , _y);
+          xOffset += .01
+        }
+        ctx.stroke();
+
+        ctx.rotate(opts.rot);
+        ctx.beginPath();
+        for(let x = -cw; x < cw; x += 1.5) {
+          let _y = sin(xOffset) * opts.ampl + y
+          ctx.lineTo(x , _y);
+          xOffset += .01
+        }
+        ctx.stroke();
+        ctx.restore()
+
+        yOffset += .02
+      }
+    }
+
+  </script>
+</html>
