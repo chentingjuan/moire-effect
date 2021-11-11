@@ -5,18 +5,23 @@
 
 canvas {
   display: block;
-  background-color: black;
+  /* background-color: black; */
   position: fixed;
   left: 0;
   top: 0;
+  z-index: 1;
 }
 
 .wrapper {
+  background-color: black;
   color: white;
-  position: relative;
-  z-index: 1;
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+h1 {
+  position: relative;
+  z-index: 2;
 }
