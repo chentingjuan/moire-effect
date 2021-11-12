@@ -12,6 +12,7 @@
     <div class="wrapper">
       <canvas id="c"></canvas>
       <canvas id="d"></canvas>
+      <canvas id="canvas"></canvas>
       <h1>Moiré effect is everywhere.</h1>
     </div>
   </body>
@@ -21,6 +22,7 @@
       // rot: 3,
       rot: 2.8,
       ampl: 40,
+      // ampl: 0
     };
     let canvas = document.getElementById("c");
     let ctx = canvas.getContext("2d");
@@ -28,6 +30,8 @@
     let dtx = danvas.getContext("2d");
     let cw = canvas.width = danvas.width = window.innerWidth, cx = cw / 2;
     let ch = canvas.height = danvas.height = window.innerHeight, cy = ch / 2;
+    let tx = cx, ty = cy;
+    let easing = 0.05;
 
     function setup() {
       frameRate(12)
@@ -56,23 +60,25 @@
       // ctx.strokeStyle = `rgba(255, 255, 255, 0.2)`
 
       ctx.translate(cx, cy);
-      dtx.translate(cx, cy);
+      // dtx.translate(cx, cy);
+      // dtx.rotate(opts.rot);
+      mouseX = cx, mouseY = cy;
     }
 
     function draw() {   
       const counter = frameCount/40
       ctx.clearRect(-cw, -ch, 2*cw, 2*ch);
       dtx.clearRect(-cw, -ch, 2*cw, 2*ch);
-      // ctx.save()
-      // ctx.translate(cx, cy);
+
+      let dx = mouseX - tx;
+      tx += dx * easing;
+      let dy = mouseY - ty;
+      ty += dy * easing;
       sineLines(counter);
-      // ctx.rotate(opts.rot);
-      // sineLines(counter);
-      // ctx.restore()
     }
 
     function sineLines(offset) {
-      let yOffset = 0;
+      // let yOffset = 0;
       for(let y = -ch-opts.ampl; y < ch; y += 40){
         let xOffset = offset;
         // ctx.save()
@@ -85,24 +91,29 @@
         // }
         // ctx.stroke();
 
-        ctx.save()
+        // ctx.save()
         dtx.save()
+
         ctx.beginPath();
-        dtx.rotate(opts.rot);
+        // dtx.translate(cx , cy);
+        dtx.translate(cx + (tx - cx)/5 , cy + (ty - cy)/5);
+        dtx.rotate(opts.rot + (tx - cx)/(cw * 3));
+        
         dtx.beginPath();
-        for(let x = -cw; x < cw; x += 1.5) {
+        for(let x = -cw*2/3; x < cw*2/3; x += 1.5) {
           // let _y = noise(xOffset, yOffset) * opts.ampl + y
           // let _y = noise(xOffset, yOffset) * opts.ampl + y * noise(timer)
           // let _y = noise(xOffset, yOffset) * opts.ampl + y * sin(timer)
           let _y = sin(xOffset) * opts.ampl + y
           ctx.lineTo(x, _y);
+          // _y = cos(xOffset) * opts.ampl + y
           dtx.lineTo(x, _y);
           xOffset += .01
         }
         ctx.stroke();
         dtx.stroke();
 
-        ctx.restore();
+        // ctx.restore();
         dtx.restore()
 
         // ctx.rotate(opts.rot);
@@ -115,9 +126,129 @@
         // ctx.stroke();
         // ctx.restore()
 
-        yOffset += .02
+        // yOffset += .02
       }
     }
+
+    const ripple = () => {
+    const rippleSettings = {
+      maxSize: 100,
+      animationSpeed: 2,
+      strokeColor: [0, 0, 0],
+    };
+
+    const canvasSettings = {
+      blur: 8,
+      ratio: 1,
+    };
+
+    function Coords(x, y) {
+      this.x = x || null;
+      this.y = y || null;
+    }
+
+    const Ripple = function Ripple(x, y, circleSize, ctx) {
+      this.position = new Coords(x, y);
+      this.circleSize = circleSize;
+      this.maxSize = rippleSettings.maxSize;
+      this.opacity = 1;
+      this.ctx = ctx;
+      this.strokeColor = `rgba(${Math.floor(rippleSettings.strokeColor[0])},
+        ${Math.floor(rippleSettings.strokeColor[1])},
+        ${Math.floor(rippleSettings.strokeColor[2])},
+        ${this.opacity})`;
+
+      this.animationSpeed = rippleSettings.animationSpeed;
+      this.opacityStep = (this.animationSpeed / (this.maxSize - circleSize)) / 2;
+    };
+
+    Ripple.prototype = {
+      update: function update() {
+        this.circleSize = this.circleSize + this.animationSpeed;
+        this.opacity = this.opacity - this.opacityStep;
+        this.strokeColor = `rgba(${Math.floor(rippleSettings.strokeColor[0])},
+          ${Math.floor(rippleSettings.strokeColor[1])},
+          ${Math.floor(rippleSettings.strokeColor[2])},
+          ${this.opacity})`;
+      },
+      draw: function draw() {
+        this.ctx.beginPath();
+        this.ctx.strokeStyle = this.strokeColor;
+        this.ctx.arc(this.position.x, this.position.y, this.circleSize, 0,
+          2 * Math.PI);
+        this.ctx.stroke();
+      },
+      setStatus: function setStatus(status) {
+        this.status = status;
+      },
+    };
+
+    const canvas = document.querySelector('#canvas');
+    const ctx = canvas.getContext('2d');
+    const ripples = [];
+
+    const height = document.body.clientHeight;
+    const width = document.body.clientWidth;
+
+    const rippleStartStatus = 'start';
+
+    const isIE11 = !!window.MSInputMethodContext && !!document.documentMode;
+
+    canvas.style.filter = `blur(${canvasSettings.blur}px)`;
+
+    canvas.width = width * canvasSettings.ratio;
+    canvas.height = height * canvasSettings.ratio;
+
+    canvas.style.width = `${width}px`;
+    canvas.style.height = `${height}px`;
+
+    let animationFrame;
+
+    // Add GUI settings
+    const addGuiSettings = () => {
+      const gui = new dat.GUI();
+      gui.add(rippleSettings, 'maxSize', 0, 1000).step(1);
+      gui.add(rippleSettings, 'animationSpeed', 1, 30).step(1);
+      gui.addColor(rippleSettings, 'strokeColor');
+
+      const blur = gui.add(canvasSettings, 'blur', 0, 20).step(1);
+      blur.onChange((value) => {
+        canvas.style.filter = `blur(${value}px)`;
+      });
+    };
+
+    addGuiSettings();
+
+    // Function which is executed on mouse hover on canvas
+    const canvasMouseOver = (e) => {
+      const x = e.clientX * canvasSettings.ratio;
+      const y = e.clientY * canvasSettings.ratio;
+      ripples.unshift(new Ripple(x, y, 2, ctx));
+    };
+
+    const animation = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const length = ripples.length;
+      for (let i = length - 1; i >= 0; i -= 1) {
+        const r = ripples[i];
+
+        r.update();
+        r.draw();
+
+        if (r.opacity <= 0) {
+          ripples[i] = null;
+          delete ripples[i];
+          ripples.pop();
+        }
+      }
+      animationFrame = window.requestAnimationFrame(animation);
+    };
+
+    animation();
+    canvas.addEventListener('mousemove', canvasMouseOver);
+    }
+    // ripple()
 
   </script>
 </html>
