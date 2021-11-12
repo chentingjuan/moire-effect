@@ -25,3 +25,7 @@ h1 {
   position: relative;
   z-index: 2;
 }
+
+.dg.ac {
+  z-index: 2;
+}
