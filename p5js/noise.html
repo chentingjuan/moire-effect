@@ -23,6 +23,8 @@
       // rot: 6,
       rot: 0.6,
       ampl: 800,
+      lineWidth: 3,
+      distance: 30,
     };
     let canvas = document.getElementById("c");
     let danvas = document.getElementById("d");
@@ -31,13 +33,15 @@
     let cw = canvas.width = danvas.width = window.innerWidth, cx = cw / 2;
     let ch = canvas.height = danvas.height = window.innerHeight, cy = ch / 2;
     let tx = cx, ty = cy;
-    let easing = 0.05;
+    let easing = 0.04;
 
     function setup() {
       frameRate(12)
-      // let gui = new dat.GUI();
+      let gui = new dat.GUI();
       // gui.add(opts, 'rot', 0, 6.28).step(0.01).onChange(draw);
       // gui.add(opts, 'ampl', 0, 100).onChange(draw);
+      gui.add(opts, 'distance', 10, 50).onChange(draw);
+      gui.add(opts, 'lineWidth', 1, 5).onChange(draw);
 
       noCanvas()
       ctx.lineWidth = 3;
@@ -67,6 +71,9 @@
     }
 
     function draw() {   
+      ctx.lineWidth = opts.lineWidth;
+      dtx.lineWidth = opts.lineWidth;
+
       const counter = frameCount/500
       ctx.clearRect(-cw, -ch, 2*cw, 2*ch);
       dtx.clearRect(-cw, -ch, 2*cw, 2*ch);
@@ -80,7 +87,7 @@
 
     function noisyLines(offset) {
       let yOffset = 0;
-      for(let y = -ch-opts.ampl; y < ch; y+=40){
+      for(let y = -ch-opts.ampl; y < ch; y += opts.distance){
         let xOffset = offset;
         // ctx.save()
         dtx.save()
