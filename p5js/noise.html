@@ -40,7 +40,7 @@
       frameRate(12)
       let gui = new dat.GUI();
       gui.add(opts, 'rot', 0, 6.28).step(0.01).onChange(draw);
-      gui.add(opts, 'ampl', 0, 100).onChange(draw);
+      gui.add(opts, 'ampl', 200, 2000).onChange(draw);
       gui.add(opts, 'distance', 10, 50).onChange(draw);
       gui.add(opts, 'lineWidth', 1, 5).onChange(draw);
 
