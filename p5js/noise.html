@@ -30,6 +30,8 @@
     let dtx = danvas.getContext("2d");
     let cw = canvas.width = danvas.width = window.innerWidth, cx = cw / 2;
     let ch = canvas.height = danvas.height = window.innerHeight, cy = ch / 2;
+    let tx = cx, ty = cy;
+    let easing = 0.05;
 
     function setup() {
       frameRate(12)
@@ -60,31 +62,35 @@
       // ctx.strokeStyle = `rgba(255, 255, 255, 0.2)`
 
       ctx.translate(cx, cy);
-      dtx.translate(cx, cy);
+      // dtx.translate(cx, cy);
+      mouseX = cx, mouseY = cy;
     }
 
     function draw() {   
-      const counter = frameCount/600
+      const counter = frameCount/500
       ctx.clearRect(-cw, -ch, 2*cw, 2*ch);
       dtx.clearRect(-cw, -ch, 2*cw, 2*ch);
-      // background(10, 90);
-      // ctx.save()
-      // ctx.translate(cx, cy);
+
+      let dx = mouseX - tx;
+      tx += dx * easing;
+      let dy = mouseY - ty;
+      ty += dy * easing;
       noisyLines(counter);
-      // ctx.rotate(opts.rot);
-      // noisyLines(counter);
-      // ctx.restore()
     }
 
-    function noisyLines(timer) {
+    function noisyLines(offset) {
       let yOffset = 0;
       for(let y = -ch-opts.ampl; y < ch; y+=40){
-        let xOffset = timer;
-        ctx.save()
+        let xOffset = offset;
+        // ctx.save()
         dtx.save()
         ctx.beginPath();
-        dtx.rotate(opts.rot);
+        // dtx.rotate(opts.rot);
+
+        dtx.translate(cx + (tx - cx)/5 , cy + (ty - cy)/5);
+        dtx.rotate(opts.rot + (tx - cx)/(cw * 3));
         dtx.beginPath();
+
         for(let x = -cw; x < cw; x+=10) {
           // let _y = noise(xOffset, yOffset) * opts.ampl + y
           // let _y = noise(xOffset, yOffset) * opts.ampl + y * noise(timer)
@@ -97,7 +103,7 @@
         ctx.stroke();
         dtx.stroke();
 
-        ctx.restore();
+        // ctx.restore();
         dtx.restore()
 
         // ctx.rotate(opts.rot);
