@@ -21,8 +21,8 @@
     let opts = {
       rot: 2.3,
       ampl: 1000,
-      lineWidth: 2,
-      distance: 20,
+      lineWidth: 3,
+      distance: 40,
     }
     let canvas = document.getElementById("c")
     let danvas = document.getElementById("d")
@@ -30,8 +30,8 @@
     let dtx = danvas.getContext("2d")
     let cw = canvas.width = danvas.width = window.innerWidth, cx = cw / 2
     let ch = canvas.height = danvas.height = window.innerHeight, cy = ch / 2
-    let tx = cx, ty = cy;
-    let easing = 0.04;
+    let tx = cx, ty = cy
+    let easing = 0.02;
 
     function setup() {
       frameRate(12)
@@ -87,15 +87,18 @@
       const counter = frameCount/500
       let yOffset = 0;
       for(let y = -ch-opts.ampl; y < ch; y += opts.distance){
-        let xOffset = offset;
+        let xOffset = counter;
         // ctx.save()
         dtx.save()
         ctx.beginPath();
         // dtx.rotate(opts.rot);
 
-        dtx.translate(cx , cy);
+        dtx.translate(cx + (tx - cx)/5, cy + (ty - cy)/5);
         // dtx.translate(cx + (tx - cx)/5 , cy + (ty - cy)/5);
-        dtx.rotate(opts.rot);
+        dtx.rotate(opts.rot + (tx - cx)/(cw * 3));
+        // dtx.rotate(opts.rot + (tx - cx)/(cw * 3));
+
+        // dtx.translate(cx + (tx - cx)/5 , cy + (ty - cy)/5);
         // dtx.rotate(opts.rot + (tx - cx)/(cw * 3));
         dtx.beginPath();
 
@@ -103,9 +106,9 @@
           // let _y = noise(xOffset, yOffset) * opts.ampl + y
           // let _y = noise(xOffset, yOffset) * opts.ampl + y * noise(timer)
           // let _y = noise(xOffset, yOffset) * opts.ampl + y * sin(timer)
-          let _y = noise(xOffset, yOffset) * opts.ampl + y;
-          ctx.lineTo(x, _y);
-          dtx.lineTo(x, _y);
+          let _y = noise(xOffset, yOffset) * opts.ampl + y
+          ctx.lineTo(x, _y)
+          dtx.lineTo(x, _y)
           xOffset += .01
         }
         ctx.stroke();
