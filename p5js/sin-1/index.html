@@ -3,7 +3,7 @@
   <head>
     <title>Moire Effect</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.5.1/dat.gui.min.js"></script>
-    <script src="./p5.min.js"></script>
+    <script src="../../resources/p5.min.js"></script>
 
     <link rel="stylesheet" href="./main.css">
   </head>
@@ -18,17 +18,13 @@
 
   <script>
     let opts = {
-      // rot: 3,
       rot: 2.8,
       ampl: 40,
-      // ampl: 0,
-      // lineWidth: 3,
-      lineWidth: 5,
-      // distance: 30,
-      distance: 10,
-      opacity: 1,
-      animFrameCount: 20,
-    };
+      lineWidth: 20,
+      distance: 30,
+      opacity: 0.9,
+      animFrameCount: 100,
+    }
     let canvas = document.getElementById("c");
     let ctx = canvas.getContext("2d");
     let danvas = document.getElementById("d");
@@ -36,33 +32,26 @@
     let cw = canvas.width = danvas.width = window.innerWidth, cx = cw / 2;
     let ch = canvas.height = danvas.height = window.innerHeight, cy = ch / 2;
     let tx = cx, ty = cy;
-    let easing = 0.05;
+    let easing = 0.02;
     var grad = ctx.createLinearGradient(-cw/2, ch/2, cw/2, -ch/2);
     var dgrad = dtx.createLinearGradient(-cw/2, ch/2, cw/2, -ch/2);
 
     function setup() {
+      console.log('hello')
       frameRate(12)
       let gui = new dat.GUI();
       gui.add(opts, 'rot', 0, 6.28).step(0.01).onChange(draw);
       gui.add(opts, 'ampl', 10, 100).onChange(draw);
-      gui.add(opts, 'distance', 10, 50).onChange(draw);
-      gui.add(opts, 'lineWidth', 1, 5).onChange(draw);
-      gui.add(opts, 'opacity', 0, 1).onChange(draw);
-      gui.add(opts, 'animFrameCount', 1, 100).onChange(draw);
+      gui.add(opts, 'distance', 30, 60).onChange(draw);
+      gui.add(opts, 'lineWidth', 1, 50).onChange(draw);
+      // gui.add(opts, 'opacity', 0, 1).onChange(draw);
+      // gui.add(opts, 'animFrameCount', 1, 100).onChange(draw);
 
       noCanvas()
-      // ctx.lineWidth = opts.lineWidth;
-      // dtx.lineWidth = opts.lineWidth;
-
-      
-      
-
       // ctx.strokeStyle = `rgba(255, 255, 255, 0.2)`
 
-      ctx.translate(cx, cy);
-      // dtx.translate(cx, cy);
-      // dtx.rotate(opts.rot);
-      mouseX = cx, mouseY = cy;
+      ctx.translate(cx, cy)
+      mouseX = cx, mouseY = cy
     }
 
     function draw() {   
@@ -70,21 +59,29 @@
       dtx.lineWidth = opts.lineWidth;
       
       grad = ctx.createLinearGradient(-cw/2, ch/2, cw/2, -ch/2);
-      grad.addColorStop(0, "rgba(255, 100, 100, 0.2)");
-      grad.addColorStop(0.3, `rgba(255, 255, 255, ${opts.opacity})`);
-      grad.addColorStop(0.7, `rgba(255, 255, 255, ${opts.opacity})`);
-      grad.addColorStop(1, "rgba(100, 100, 255, 0.4)");
+      // grad.addColorStop(0, "rgba(255, 100, 100, 0.2)");
+      // grad.addColorStop(0.3, `rgba(255, 255, 255, ${opts.opacity})`);
+      // grad.addColorStop(0.7, `rgba(255, 255, 255, ${opts.opacity})`);
+      // grad.addColorStop(1, "rgba(100, 100, 255, 0.4)");
+      grad.addColorStop(0, "rgba(60, 10, 10, 0.9)")
+      grad.addColorStop(0.3, `rgba(0, 0, 0, ${opts.opacity})`)
+      grad.addColorStop(0.7, `rgba(0, 0, 0, ${opts.opacity})`)
+      grad.addColorStop(1, "rgba(10, 10, 60, 0.9)")
       ctx.strokeStyle = grad;
 
       dgrad = dtx.createLinearGradient(-cw/2, ch/2, cw/2, -ch/2);
-      dgrad.addColorStop(0, "rgba(255, 100, 100, 0.2)");
-      dgrad.addColorStop(0.3, `rgba(255, 255, 255, ${opts.opacity})`);
-      dgrad.addColorStop(0.7, `rgba(255, 255, 255, ${opts.opacity})`);
-      dgrad.addColorStop(1, "rgba(100, 100, 255, 0.4)");
+      // dgrad.addColorStop(0, "rgba(255, 100, 100, 0.2)");
+      // dgrad.addColorStop(0.3, `rgba(255, 255, 255, ${opts.opacity})`);
+      // dgrad.addColorStop(0.7, `rgba(255, 255, 255, ${opts.opacity})`);
+      // dgrad.addColorStop(1, "rgba(100, 100, 255, 0.4)");
+      dgrad.addColorStop(0, "rgba(60, 10, 10, 0.9)")
+      dgrad.addColorStop(0.3, `rgba(0, 0, 0, ${opts.opacity})`)
+      dgrad.addColorStop(0.7, `rgba(0, 0, 0, ${opts.opacity})`)
+      dgrad.addColorStop(1, "rgba(10, 10, 60, 0.9)")
       dtx.strokeStyle = dgrad;
 
 
-      const counter = frameCount/opts.animFrameCount
+      const counter = frameCount / opts.animFrameCount
       ctx.clearRect(-cw, -ch, 2*cw, 2*ch);
       dtx.clearRect(-cw, -ch, 2*cw, 2*ch);
 
@@ -97,19 +94,9 @@
 
     function sineLines(offset) {
       // let yOffset = 0;
-      for(let y = -ch-opts.ampl; y < ch; y += opts.distance){
+      for (let y = -ch-opts.ampl; y < ch; y += opts.distance) {
         let xOffset = offset;
-        // ctx.save()
-        
-        // ctx.beginPath();
-        // for(let x = -cw; x < cw; x += 1.5) {
-        //   let _y = sin(xOffset) * opts.ampl + y
-        //   ctx.lineTo(x , _y);
-        //   xOffset += .01
-        // }
-        // ctx.stroke();
-
-        // ctx.save()
+       
         dtx.save()
 
         ctx.beginPath();
@@ -118,13 +105,13 @@
         dtx.rotate(opts.rot + (tx - cx)/(cw * 3));
         
         dtx.beginPath();
-        for(let x = -cw*2/3; x < cw*2/3; x += 1.5) {
+        for(let x = -cw*2/3; x < cw*2/3; x += 2) {
           // let _y = noise(xOffset, yOffset) * opts.ampl + y
           // let _y = noise(xOffset, yOffset) * opts.ampl + y * noise(timer)
           // let _y = noise(xOffset, yOffset) * opts.ampl + y * sin(timer)
           let _y = sin(xOffset) * opts.ampl + y
           ctx.lineTo(x, _y);
-          // _y = cos(xOffset) * opts.ampl + y
+          _y = sin(xOffset * 1.2) * opts.ampl * 1.2 + y
           dtx.lineTo(x, _y);
           xOffset += .01
         }

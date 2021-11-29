@@ -3,13 +3,21 @@
   margin: 0;
 }
 
-canvas {
+canvas#c {
   display: block;
   /* background-color: black; */
   position: fixed;
   left: 0;
   top: 0;
   z-index: 1;
+}
+
+.canvas-wrapper {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: none;
 }
 
 .wrapper {
@@ -28,4 +36,13 @@ h1 {
 
 .dg.ac {
   z-index: 2;
+}
+
+.rotate {
+  animation: rotation 30s linear infinite;
+}
+
+@keyframes rotation {
+  0% {transform: rotate(0deg);}
+  100% {transform: rotate(360deg);}
 }
