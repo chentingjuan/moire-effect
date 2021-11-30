@@ -1,0 +1,36 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+canvas {
+  display: block;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1;
+}
+
+.wrapper {
+  /* background-color: #ddd; */
+  /* background: rgb(82,92,144);
+  background: radial-gradient(circle, rgba(82,92,144,1) 0%, rgba(48,60,116,1) 21%, rgba(12,16,36,1) 100%);
+   */
+  
+   background: rgb(2,0,36);
+   background: linear-gradient(65deg, rgba(2,0,36,1) 0%, rgba(195,195,255,1) 54%, rgba(0,0,0,1) 100%);
+   color: white;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+h1 {
+  position: relative;
+  z-index: 2;
+}
+
+.dg.ac {
+  z-index: 2;
+}

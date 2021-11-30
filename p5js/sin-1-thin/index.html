@@ -19,33 +19,30 @@
   <script>
     let opts = {
       rot: 2.8,
-      ampl: 40,
-      lineWidth: 20,
-      distance: 30,
-      opacity: 0.9,
+      ampl: 60,
+      lineWidth: 2,
+      distance: 20,
+      opacity: 0.8,
       animFrameCount: 100,
     }
-    let canvas = document.getElementById("c");
-    let ctx = canvas.getContext("2d");
-    let danvas = document.getElementById("d");
-    let dtx = danvas.getContext("2d");
-    let cw = canvas.width = danvas.width = window.innerWidth, cx = cw / 2;
-    let ch = canvas.height = danvas.height = window.innerHeight, cy = ch / 2;
-    let tx = cx, ty = cy;
-    let easing = 0.02;
-    var grad = ctx.createLinearGradient(-cw/2, ch/2, cw/2, -ch/2);
-    var dgrad = dtx.createLinearGradient(-cw/2, ch/2, cw/2, -ch/2);
+    let canvas = document.getElementById("c"), ctx = canvas.getContext("2d")
+    let danvas = document.getElementById("d"), dtx = danvas.getContext("2d")
+    let cw = canvas.width = danvas.width = window.innerWidth, cx = cw / 2
+    let ch = canvas.height = danvas.height = window.innerHeight, cy = ch / 2
+    let tx = cx, ty = cy
+    let easing = 0.02
+    var grad = ctx.createLinearGradient(-cw/2, ch/2, cw/2, -ch/2)
+    var dgrad = dtx.createLinearGradient(-cw/2, ch/2, cw/2, -ch/2)
 
     function setup() {
-      console.log('hello')
       frameRate(12)
-      let gui = new dat.GUI();
-      gui.add(opts, 'rot', 0, 6.28).step(0.01).onChange(draw);
-      gui.add(opts, 'ampl', 10, 100).onChange(draw);
-      gui.add(opts, 'distance', 30, 60).onChange(draw);
-      gui.add(opts, 'lineWidth', 1, 50).onChange(draw);
-      // gui.add(opts, 'opacity', 0, 1).onChange(draw);
-      // gui.add(opts, 'animFrameCount', 1, 100).onChange(draw);
+      let gui = new dat.GUI()
+      gui.add(opts, 'rot', 0, 6.28).step(0.01).onChange(draw)
+      gui.add(opts, 'ampl', 5, 200).onChange(draw)
+      gui.add(opts, 'distance', 15, 30).onChange(draw)
+      gui.add(opts, 'lineWidth', 1, 8).onChange(draw)
+      gui.add(opts, 'opacity', 0, 1).onChange(draw);
+      gui.add(opts, 'animFrameCount', 1, 100).onChange(draw)
 
       noCanvas()
       // ctx.strokeStyle = `rgba(255, 255, 255, 0.2)`
@@ -63,10 +60,10 @@
       // grad.addColorStop(0.3, `rgba(255, 255, 255, ${opts.opacity})`);
       // grad.addColorStop(0.7, `rgba(255, 255, 255, ${opts.opacity})`);
       // grad.addColorStop(1, "rgba(100, 100, 255, 0.4)");
-      grad.addColorStop(0, "rgba(60, 10, 10, 0.9)")
+      grad.addColorStop(0, `rgba(60, 10, 10, ${opts.opacity})`)
       grad.addColorStop(0.3, `rgba(0, 0, 0, ${opts.opacity})`)
       grad.addColorStop(0.7, `rgba(0, 0, 0, ${opts.opacity})`)
-      grad.addColorStop(1, "rgba(10, 10, 60, 0.9)")
+      grad.addColorStop(1, `rgba(10, 10, 60, ${opts.opacity})`)
       ctx.strokeStyle = grad;
 
       dgrad = dtx.createLinearGradient(-cw/2, ch/2, cw/2, -ch/2);
@@ -74,26 +71,26 @@
       // dgrad.addColorStop(0.3, `rgba(255, 255, 255, ${opts.opacity})`);
       // dgrad.addColorStop(0.7, `rgba(255, 255, 255, ${opts.opacity})`);
       // dgrad.addColorStop(1, "rgba(100, 100, 255, 0.4)");
-      dgrad.addColorStop(0, "rgba(60, 10, 10, 0.9)")
+      dgrad.addColorStop(0, `rgba(60, 10, 10, ${opts.opacity})`)
       dgrad.addColorStop(0.3, `rgba(0, 0, 0, ${opts.opacity})`)
       dgrad.addColorStop(0.7, `rgba(0, 0, 0, ${opts.opacity})`)
-      dgrad.addColorStop(1, "rgba(10, 10, 60, 0.9)")
-      dtx.strokeStyle = dgrad;
+      dgrad.addColorStop(1, `rgba(10, 10, 60, ${opts.opacity})`)
+      dtx.strokeStyle = dgrad
 
+      
+      ctx.clearRect(-cw, -ch, 2*cw, 2*ch)
+      dtx.clearRect(-cw, -ch, 2*cw, 2*ch)
 
+      let dx = mouseX - tx
+      tx += dx * easing
+      let dy = mouseY - ty
+      ty += dy * easing
+      
       const counter = frameCount / opts.animFrameCount
-      ctx.clearRect(-cw, -ch, 2*cw, 2*ch);
-      dtx.clearRect(-cw, -ch, 2*cw, 2*ch);
-
-      let dx = mouseX - tx;
-      tx += dx * easing;
-      let dy = mouseY - ty;
-      ty += dy * easing;
-      sineLines(counter);
+      sineLines(counter)
     }
 
     function sineLines(offset) {
-      // let yOffset = 0;
       for (let y = -ch-opts.ampl; y < ch; y += opts.distance) {
         let xOffset = offset;
        
@@ -101,8 +98,9 @@
 
         ctx.beginPath();
         // dtx.translate(cx , cy);
-        dtx.translate(cx + (tx - cx)/5 , cy + (ty - cy)/5);
-        dtx.rotate(opts.rot + (tx - cx)/(cw * 3));
+        dtx.translate(cx + (tx - cx)/5 , cy + (ty - cy)/5)
+        dtx.rotate(opts.rot + (tx - cx)/(cw * 3))
+        // dtx.scale(0.5, 0.5)
         
         dtx.beginPath();
         for(let x = -cw*2/3; x < cw*2/3; x += 2) {

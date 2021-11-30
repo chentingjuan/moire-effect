@@ -5,6 +5,7 @@
 
 canvas {
   display: block;
+  /* background-color: black; */
   position: fixed;
   left: 0;
   top: 0;
