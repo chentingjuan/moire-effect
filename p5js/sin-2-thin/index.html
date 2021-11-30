@@ -69,11 +69,11 @@
         for (let x = 0; x < cols; x++) {
           cGrids[x][y] = [
             (x * xRange)-cw*1.5, 
-            sin(yOffset/3 + xOffset) * sin(yOffset) * opts.ampl * 1 + (y * opts.distance - ch*1.5)
+            sin(yOffset/3 + xOffset) * sin(yOffset * cos(yOffset/2)) * opts.ampl * 1 + (y * opts.distance - ch*1.5)
           ]
           dGrids[x][y] = [
             (x * xRange)-cw*1.5, 
-            sin(yOffset/8 + xOffset) * sin(yOffset) * opts.ampl * 0.9 + (y * opts.distance - ch*1.5)
+            sin(yOffset/8 + xOffset) * sin(yOffset * cos(yOffset/2)) * opts.ampl * 0.9 + (y * opts.distance - ch*1.5)
           ]
           xOffset += .01
         }
@@ -88,10 +88,10 @@
       dtx.lineWidth = opts.lineWidth
 
       dgrad = dtx.createLinearGradient(-cw/2, ch/2, cw/2, -ch/2)
-      dgrad.addColorStop(0, "rgba(255, 100, 100, 0.9)")
+      dgrad.addColorStop(0, `rgba(255, 200, 200, ${opts.opacity})`)
       dgrad.addColorStop(0.3, `rgba(255, 255, 255, ${opts.opacity})`)
       dgrad.addColorStop(0.7, `rgba(255, 255, 255, ${opts.opacity})`)
-      dgrad.addColorStop(1, "rgba(100, 100, 255, 0.9)")
+      dgrad.addColorStop(1, `rgba(200, 200, 255, ${opts.opacity})`)
       dtx.strokeStyle = dgrad
 
 
@@ -112,10 +112,10 @@
       ctx.clearRect(-cw, -ch, 2*cw, 2*ch)
       ctx.lineWidth = opts.lineWidth
       grad = ctx.createLinearGradient(-cw/2, ch/2, cw/2, -ch/2)
-      grad.addColorStop(0, "rgba(255, 100, 100, 0.9)")
+      grad.addColorStop(0, `rgba(255, 200, 200, ${opts.opacity})`)
       grad.addColorStop(0.3, `rgba(255, 255, 255, ${opts.opacity})`)
       grad.addColorStop(0.7, `rgba(255, 255, 255, ${opts.opacity})`)
-      grad.addColorStop(1, "rgba(100, 100, 255, 0.9)")
+      grad.addColorStop(1, `rgba(200, 200, 255, ${opts.opacity})`)
       ctx.strokeStyle = grad
       cSineLines()
     }
