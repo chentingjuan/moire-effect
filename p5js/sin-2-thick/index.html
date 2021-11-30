@@ -39,7 +39,7 @@
     let grad = ctx.createLinearGradient(-cw/2, ch/2, cw/2, -ch/2)
     let dgrad = dtx.createLinearGradient(-cw/2, ch/2, cw/2, -ch/2)
 
-    let xRange = 1.8, yRange = opts.distance
+    let xRange = 2.2, yRange = opts.distance
     let cols = parseInt(3 * cw / xRange) + 1
     let rows = parseInt(3 * ch / yRange) + 1
 
@@ -158,7 +158,7 @@
         ctx.save()
         // ctx.translate(cx * 2/3, cy * 2/3)
         ctx.translate(cx, cy)
-        // ctx.scale(0.8, 0.8)
+        ctx.scale(0.95, 0.95)
         ctx.beginPath()
         for(let x = 0; x < cols; x++) {
           ctx.lineTo(cGrids[x][y][0], cGrids[x][y][1])
@@ -180,8 +180,8 @@
         dtx.translate(cx + (tx-cx)/6, cy + (ty-cy)/6)
 
         // dtx.rotate(1)
-        dtx.rotate(offset/2 + opts.startRot + (tx - cx)/(cw * 3))
-        // dtx.scale(0.8, 0.8)
+        dtx.rotate(offset/2 + opts.startRot + (tx - cx*1.8)/(cw * 2))
+        dtx.scale(0.95, 0.95)
         dtx.beginPath()
         for(let x = 0; x < cols; x++) {
           dtx.lineTo(dGrids[x][y][0], dGrids[x][y][1])

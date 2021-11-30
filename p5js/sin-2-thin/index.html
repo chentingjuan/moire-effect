@@ -21,7 +21,7 @@
       startRot: 3.2,
       ampl: 80,
       lineWidth: 3,
-      distance: 20,
+      distance: 30,
       opacity: 0.3,
       animFrameCount: 100,
     }
@@ -155,7 +155,7 @@
         ctx.save()
         // ctx.translate(cx * 2/3, cy * 2/3)
         ctx.translate(cx, cy)
-        // ctx.scale(0.8, 0.8)
+        ctx.scale(0.6, 0.6)
         ctx.beginPath()
         for(let x = 0; x < cols; x++) {
           ctx.lineTo(cGrids[x][y][0], cGrids[x][y][1])
@@ -178,7 +178,7 @@
 
         // dtx.rotate(1)
         dtx.rotate(offset/2 + opts.startRot + (tx - cx)/(cw * 3))
-        // dtx.scale(0.8, 0.8)
+        dtx.scale(0.6, 0.6)
         dtx.beginPath()
         for(let x = 0; x < cols; x++) {
           dtx.lineTo(dGrids[x][y][0], dGrids[x][y][1])
