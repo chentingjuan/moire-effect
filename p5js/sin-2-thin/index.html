@@ -12,15 +12,16 @@
     <div class="wrapper">
       <canvas id="c" style="opacity: 1;"></canvas>
       <canvas id="d" style="opacity: 1;"></canvas>
-      <h1>Moiré effect is everywhere.</h1>
+      <!-- <h1>Moiré effect is everywhere.</h1> -->
+      <img src="../../assets/images/Artfield-logo-w.png" alt="">
     </div>
   </body>
 
   <script>
     let opts = {
-      startRot: 3.2,
+      startRot: 2.6,
       ampl: 80,
-      lineWidth: 3,
+      lineWidth: 5,
       distance: 30,
       opacity: 0.3,
       animFrameCount: 100,
@@ -73,7 +74,7 @@
           ]
           dGrids[x][y] = [
             (x * xRange)-cw*1.5, 
-            sin(yOffset/8 + xOffset) * sin(yOffset * cos(yOffset/2)) * opts.ampl * 0.9 + (y * opts.distance - ch*1.5)
+            sin(yOffset/8 + xOffset) * sin(yOffset) * opts.ampl * 0.9 + (y * opts.distance - ch*1.5)
           ]
           xOffset += .01
         }

@@ -42,10 +42,18 @@ background: linear-gradient(to right, #292E49, #536976); /* W3C, IE 10+/ Edge, F
   align-items: center;
 }
 
-h1 {
+h1, img {
+  display: inline-block;
+  vertical-align: top;
   position: relative;
   z-index: 2;
 }
+
+img {
+  width: 250px;
+  height: auto;
+}
+
 
 .dg.ac {
   z-index: 2;

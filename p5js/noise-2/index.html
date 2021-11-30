@@ -12,17 +12,17 @@
     <div class="wrapper">
       <canvas id="c"></canvas>
       <canvas id="d"></canvas>
-    
-      <h1>Moiré effect is everywhere.</h1>
+      <img src="../../assets/images/Artfield-logo-w.png" alt="">
+      <!-- <h1>Moiré effect is everywhere.</h1> -->
     </div>
   </body>
 
   <script>
     let opts = {
       rot: 0,
-      ampl: 300,
+      ampl: 360,
       lineWidth: 1,
-      distance: 10,
+      distance: 15,
       mouseEasing: 0.02,
     }
     let canvas = document.getElementById("c")
@@ -34,21 +34,22 @@
     let tx = cx, ty = cy
     let easing = 0.02
 
+    let xRange = 8, yRange = opts.distance
     // let cols = parseInt(3*cw / opts.distance)
     // let rows = parseInt(3*ch / opts.distance)
-    let cols = parseInt(3 * cw / opts.distance) + 2
-    let rows = parseInt(3 * ch / opts.distance) + 2
+    let cols = parseInt(3 * cw / xRange) + 2
+    let rows = parseInt(3 * ch / yRange) + 2
 
     let grids = []
     let moving = 0
 
     function setup() {
       frameRate(16)
-      // let gui = new dat.GUI();
-      // gui.add(opts, 'rot', 0, 6.28).step(0.01).onChange(draw);
-      // gui.add(opts, 'ampl', 200, 2000).onChange(draw);
-      // gui.add(opts, 'distance', 10, 50).onChange(draw);
-      // gui.add(opts, 'lineWidth', 1, 5).onChange(draw);
+      let gui = new dat.GUI();
+      gui.add(opts, 'rot', 0, 6.28).step(0.01).onChange(draw);
+      gui.add(opts, 'ampl', 20, 600).onChange(draw);
+      // gui.add(opts, 'distance', 2, 30).onChange(draw);
+      gui.add(opts, 'lineWidth', 1, 5).onChange(draw);
 
       noCanvas()
       ctx.lineWidth = 3
@@ -74,7 +75,7 @@
       // dtx.strokeStyle = `rgba(255, 255, 255, 0.4)`
       
       // ctx.translate(cx, cy)
-      dtx.translate(-cx, -cy)
+      // dtx.translate(-cx, -cy)
       mouseX = cx, mouseY = cy
 
       for(let x = 0; x < cols; x++) {
@@ -87,15 +88,15 @@
 
     function draw() {   
       ctx.lineWidth = opts.lineWidth
-      dtx.lineWidth = opts.lineWidth
+      // dtx.lineWidth = opts.lineWidth
 
       ctx.clearRect(-cw, -ch, 3*cw, 3*ch)
-      dtx.clearRect(-cw, -ch, 3*cw, 3*ch)
+      // dtx.clearRect(-cw, -ch, 3*cw, 3*ch)
 
-      let dx = mouseX - tx
-      tx += dx * easing
-      let dy = mouseY - ty
-      ty += dy * easing
+      // let dx = mouseX - tx
+      // tx += dx * easing
+      // let dy = mouseY - ty
+      // ty += dy * easing
 
       moving += 0.003
 
@@ -103,7 +104,7 @@
       for(let y = 0; y < rows; y++) {
         let xOffset = moving
         for(let x = 0; x < cols; x++) {
-          grids[x][y] = noise(xOffset, yOffset) * opts.ampl + y * opts.distance - cy
+          grids[x][y] = noise(xOffset, yOffset) * opts.ampl + y * opts.distance - ch*1.5
           xOffset += .02
         }
         yOffset += .04
@@ -114,25 +115,27 @@
 
     function noisyLines(frameCount) {
       for(let y = 0; y < rows; y++) {
-        dtx.save()
+        // dtx.save()
+        ctx.save()
         ctx.beginPath()
 
         // dtx.translate((tx - cx)/5 , (ty - cy)/5);
         // dtx.rotate(opts.rot + (tx - cx)/(cw * 3));
-        
+        // ctx.rotate(opts.rot + (tx - cx)/(cw * 3));
         // dtx.beginPath();
-
+        ctx.translate(cx, cy)
+        ctx.rotate(opts.rot)
         for(let x = 0; x < cols; x++) {
           // const index = (x + frameCount) % cols
-          const index = x
-          ctx.lineTo(x * opts.distance - cx, grids[x][y])
+          // const index = x
+          ctx.lineTo(x * xRange - cw*1.5, grids[x][y])
           // dtx.lineTo(x * opts.distance - cx, grids[cols - x - 1][y])
         }
         ctx.stroke()
         // dtx.stroke();
 
         ctx.restore()
-        dtx.restore()
+        // dtx.restore()
       }  
     }
 
