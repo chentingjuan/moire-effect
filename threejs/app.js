@@ -2,11 +2,11 @@
 import * as THREE from './../resources/three.min.js';
 
 // import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import fragment from './shaders/1/fragment.glsl'
-import fragment2 from './shaders/2/fragment.glsl'
+// import fragment from './shaders/1/fragment.js'
+// import fragment2 from './shaders/2/fragment.js'
 
-import vertex from './shaders/1/vertex.glsl'
-import vertex2 from './shaders/2/vertex.glsl'
+// import vertex from './shaders/1/vertex.js'
+// import vertex2 from './shaders/2/vertex.js'
 
 // import * as dat from "dat.gui"
 
@@ -85,47 +85,6 @@ class Sketch {
     this.width = this.container.offsetWidth
     this.height = this.container.offsetHeight
 
-    // const bounds = this.contentWrapperStore.dom.getBoundingClientRect()
-    // this.contentWrapperStore.current.width = bounds.width
-    // this.contentWrapperStore.current.height = bounds.height
-    // this.contentWrapperStore.current.left = bounds.left
-    // this.contentWrapperStore.current.top = bounds.top
-    // this.grid.scale.x = this.contentWrapperStore.current.width / this.contentWrapperStore.origin.width
-    
-    // this.rrender.canvas.width = this.scrollWrapper.offsetWidth
-    // this.rrender.canvas.height = this.scrollWrapper.offsetHeight
-    // this.paths.map(p => {
-    //   const bound = p.dom.getBoundingClientRect()
-    //   for(let i=0; i<p.number; i++) {
-    //     Matter.Body.set(p.circles[i], "position", {
-    //       x: p.originSegements[i].point.x * this.width / 1440, 
-    //       y: p.originSegements[i].point.y * this.width / 1440 + bound.top
-    //     })
-    //     Matter.Body.set(p.anchors[i], "position", {
-    //       x: p.originSegements[i].point.x * this.width / 1440, 
-    //       y: p.originSegements[i].point.y * this.width / 1440 + bound.top
-    //     })
-    //   }
-    // })
-    // this.paperCanvas.width = this.width
-    // this.paperCanvas.height = this.height
-
-    // this.stoneDoms.map(s => {
-    //   const shape = new THREE.Shape()
-    //   const pp = new Paper.Path(s.attributes.d.value)
-    //   const bounds = s.getBoundingClientRect()
-      
-    //   pp.segments.map((s, i) => {
-    //     const y = - (s.point.y) * bounds.height / pp.bounds.height + this.contentWrapperStore.origin.height/2 + this.contentWrapperStore.origin.top - bounds.top
-    //     const x = (s.point.x) * bounds.width / pp.bounds.width - this.width/2 + bounds.left
-    //     i===0 ? shape.moveTo(x, y) : shape.lineTo(x, y)
-    //   })
-
-    //   const geometry = new THREE.ShapeGeometry(shape)
-    //   const mesh = new THREE.Mesh(geometry, this.objectsMaterial)
-    //   this.objects.add(mesh)
-    // })
-
     this.renderer.setSize(this.width, this.height)
     this.camera.aspect = this.width / this.height
     this.camera.updateProjectionMatrix()
@@ -138,8 +97,40 @@ class Sketch {
         resolution: { type: "v4", value: new THREE.Vector4() },
       },
       // side: THREE.DoubleSide,
-      fragmentShader: fragment,
-      vertexShader: vertex,
+      fragmentShader: `
+        precision mediump float;
+        uniform float time;
+        uniform vec2 resolution;
+
+        #define PI 3.14159265359
+
+        void main(void) {
+          vec2 uv = (2. * gl_FragCoord.xy - resolution.xy) / resolution.y;
+          //uv.y += 0.4 * sin(uv.x * sin(time) + time);
+          //uv.y += 0.1 * sin(uv.x + time/100.);
+          uv.y += sin(uv.y * 1.6 + time/10.) * sin(uv.x) * 0.4;
+          //float scroll = time / 20.;
+          //vec2 noisePos = vec2(scroll + uv.x * 0.015, 0.5 + 0.5 * sin(scroll * PI));
+          //float numLines = 40. + 160. * sin(PI * noisePos.x);
+          float numLines = 100.;
+          float col = 0.7 + 1. * sin(uv.y * numLines);
+          float aA = 1./(resolution.y / numLines);
+
+          
+          gl_FragColor = vec4(smoothstep(0.5 - aA, 0.5 + aA, col) * .6);
+          //gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+        }
+      `,
+      vertexShader: `
+        //varying vec2 vUv; 
+        
+        void main() {
+          // vUv = position; 
+        
+          vec4 modelViewPosition = modelViewMatrix * vec4(position, 1.0);
+          gl_Position = projectionMatrix * modelViewPosition; 
+        }
+      `,
       transparent: true
       // wireframe: true
     })
@@ -156,8 +147,40 @@ class Sketch {
         resolution: { type: "v4", value: new THREE.Vector4() },
       },
       // side: THREE.DoubleSide,
-      fragmentShader: fragment2,
-      vertexShader: vertex2,
+      fragmentShader: `
+      precision mediump float;
+      uniform float time;
+      uniform vec2 resolution;
+      
+      #define PI 3.14159265359
+      
+      void main(void) {
+        vec2 uv = (2. * gl_FragCoord.xy - resolution.xy) / resolution.y;
+        //uv.y += 0.4 * sin(uv.x * sin(time) + time);
+        //uv.y += 0.1 * sin(uv.x + time/100.);
+        uv.x += sin(uv.y * 1.6 + time/10.) * sin(uv.x) * 0.4;
+        //float scroll = time / 20.;
+        //vec2 noisePos = vec2(scroll + uv.x * 0.015, 0.5 + 0.5 * sin(scroll * PI));
+        //float numLines = 40. + 160. * sin(PI * noisePos.x);
+        float numLines = 100.;
+        float col = 0.7 + 1. * sin(uv.x * numLines);
+        float aA = 1./(resolution.y / numLines);
+      
+        
+        gl_FragColor = vec4(smoothstep(0.5 - aA, 0.5 + aA, col) * .6);
+        //gl_FragColor = vec4(vec3(smoothstep(0.5 - aA, 0.5 + aA, col)), .6);
+      }
+      `,
+      vertexShader: `
+      //varying vec2 vUv; 
+      
+      void main() {
+        // vUv = position; 
+      
+        vec4 modelViewPosition = modelViewMatrix * vec4(position, 1.0);
+        gl_Position = projectionMatrix * modelViewPosition; 
+      }
+      `,
       transparent: true,
       // wireframe: true
     })
