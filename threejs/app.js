@@ -1,12 +1,14 @@
-import * as THREE from 'three'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+// import * as THREE from 'three'
+import * as THREE from './../resources/three.min.js';
+
+// import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import fragment from './shaders/1/fragment.glsl'
 import fragment2 from './shaders/2/fragment.glsl'
 
 import vertex from './shaders/1/vertex.glsl'
 import vertex2 from './shaders/2/vertex.glsl'
 
-import * as dat from "dat.gui"
+// import * as dat from "dat.gui"
 
 class Sketch {
   constructor() {
@@ -32,7 +34,7 @@ class Sketch {
     this.container.appendChild(this.renderer.domElement)
 
     // this.currentScroll = 0
-    this.controls = new OrbitControls(this.camera, this.renderer.domElement)
+    // this.controls = new OrbitControls(this.camera, this.renderer.domElement)
 
 
     this.settings()
