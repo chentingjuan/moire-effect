@@ -12,11 +12,6 @@
   justify-content: center;
 }
 
-h1 {
-  font-size: 44px;
-  color: #333;
-}
-
 #container {
   position: fixed;
   z-index: -1;
@@ -24,4 +19,16 @@ h1 {
   left: 0;
   right: 0;
   bottom: 0;
+}
+
+h1, img {
+  display: inline-block;
+  vertical-align: top;
+  position: relative;
+  z-index: 2;
+}
+
+img {
+  width: 250px;
+  height: auto;
 }
