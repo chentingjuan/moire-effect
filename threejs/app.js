@@ -1,5 +1,5 @@
 // import * as THREE from 'three'
-import * as THREE from './../resources/three.min.js';
+// import * as THREE from './../resources/three.min.js';
 
 // import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 // import fragment from './shaders/1/fragment.js'
