@@ -2,7 +2,8 @@
 <html>
   <head>
     <title>Moire Effect</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.5.1/dat.gui.min.js"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <script src="../../resources/dat.gui.min.js"></script>
     <script src="../../resources/p5.min.js"></script>
 
     <link rel="stylesheet" href="./main.css">
@@ -16,16 +17,17 @@
       <img src="../../assets/images/Artfield-logo-w.png" alt="">
     </div>
   </body>
-
+</html>
   <script>
     let opts = {
       startRot: 2.8,
       ampl: 45,
-      lineWidth: 28,
-      // lineWidth: 2,
+      // ampl: 57,
+      // lineWidth: 28,
+      lineWidth: 30,
       distance: 32,
-      // distance: 10,
-      opacity: 0.9,
+      // distance: 26,
+      opacity: 1,
       animFrameCount: 100,
     }
     let canvas = document.getElementById("c")
@@ -48,12 +50,12 @@
 
     function setup() {
       frameRate(18)
-      let gui = new dat.GUI()
-      gui.add(opts, 'startRot', 0, 6.28).step(0.01).onChange(()=>{ setUpC(); draw(); });
-      gui.add(opts, 'ampl', 10, 100).onChange(()=>{ setUpC(); draw(); })
-      gui.add(opts, 'distance', 10, 50).onChange(()=>{ setUpC(); draw(); })
-      gui.add(opts, 'lineWidth', 1, 50).onChange(()=>{ setUpC(); draw(); })
-      gui.add(opts, 'opacity', 0, 1).onChange(()=>{ setUpC(); draw(); });
+      // let gui = new dat.GUI()
+      // gui.add(opts, 'startRot', 0, 6.28).step(0.01).onChange(()=>{ setUpC(); draw(); });
+      // gui.add(opts, 'ampl', 10, 100).onChange(()=>{ setUpC(); draw(); })
+      // gui.add(opts, 'distance', 10, 50).onChange(()=>{ setUpC(); draw(); })
+      // gui.add(opts, 'lineWidth', 1, 50).onChange(()=>{ setUpC(); draw(); })
+      // gui.add(opts, 'opacity', 0, 1).onChange(()=>{ setUpC(); draw(); });
       // gui.add(opts, 'animFrameCount', 1, 100).onChange(draw);
 
       noCanvas()
@@ -109,7 +111,7 @@
       ty += dy * easing
       // cSinLine()
       // dSineLine(counter)
-      dSineLines(counter)
+      // dSineLines(counter)
     }
 
     function setUpC() {
@@ -196,4 +198,3 @@
       }
     }
   </script>
-</html>
