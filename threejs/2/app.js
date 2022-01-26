@@ -2,7 +2,7 @@
 // import * as dat from 'dat.gui'
 // import gsap from 'gsap'
 
-const patternFileName = 'pattern-4.png'
+const patternFileName = 'pattern-3.png'
 
 class Sketch {
   constructor() {
