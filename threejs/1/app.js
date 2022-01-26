@@ -1,5 +1,3 @@
-import * as THREE from 'three'
-
 class Sketch {
   constructor() {
     this.time = 0

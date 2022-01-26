@@ -2,7 +2,6 @@
 <html>
   <head>
     <title>Moire Effect</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <script src="../../resources/dat.gui.min.js"></script>
     <script src="../../resources/p5.min.js"></script>
 
@@ -18,183 +17,184 @@
     </div>
   </body>
 </html>
-  <script>
-    let opts = {
-      startRot: 2.8,
-      ampl: 45,
-      // ampl: 57,
-      // lineWidth: 28,
-      lineWidth: 30,
-      distance: 32,
-      // distance: 26,
-      opacity: 1,
-      animFrameCount: 100,
-    }
-    let canvas = document.getElementById("c")
-    let danvas = document.getElementById("d")
-    let ctx = canvas.getContext("2d")
-    let dtx = danvas.getContext("2d")
-    let cw = canvas.width = danvas.width = window.innerWidth, cx = cw / 2
-    let ch = canvas.height = danvas.height = window.innerHeight, cy = ch / 2
-    let tx = cx, ty = cy
-    let easing = 0.05
-    // let grad, dgrad
-    let grad = ctx.createLinearGradient(-cw/2, ch/2, cw/2, -ch/2)
-    let dgrad = dtx.createLinearGradient(-cw/2, ch/2, cw/2, -ch/2)
 
-    let xRange = 2.2, yRange = opts.distance
-    let cols = parseInt(3 * cw / xRange) + 1
-    let rows = parseInt(3 * ch / yRange) + 1
+<script>
+  let opts = {
+    startRot: 2.8,
+    ampl: 45,
+    // ampl: 57,
+    // lineWidth: 28,
+    lineWidth: 30,
+    distance: 32,
+    // distance: 26,
+    opacity: 1,
+    animFrameCount: 100,
+  }
+  let canvas = document.getElementById("c")
+  let danvas = document.getElementById("d")
+  let ctx = canvas.getContext("2d")
+  let dtx = danvas.getContext("2d")
+  let cw = canvas.width = danvas.width = window.innerWidth, cx = cw / 2
+  let ch = canvas.height = danvas.height = window.innerHeight, cy = ch / 2
+  let tx = cx, ty = cy
+  let easing = 0.05
+  // let grad, dgrad
+  let grad = ctx.createLinearGradient(-cw/2, ch/2, cw/2, -ch/2)
+  let dgrad = dtx.createLinearGradient(-cw/2, ch/2, cw/2, -ch/2)
 
-    let cGrids = [], dGrids = []
+  let xRange = 2.2, yRange = opts.distance
+  let cols = parseInt(3 * cw / xRange) + 1
+  let rows = parseInt(3 * ch / yRange) + 1
 
-    function setup() {
-      frameRate(18)
-      // let gui = new dat.GUI()
-      // gui.add(opts, 'startRot', 0, 6.28).step(0.01).onChange(()=>{ setUpC(); draw(); });
-      // gui.add(opts, 'ampl', 10, 100).onChange(()=>{ setUpC(); draw(); })
-      // gui.add(opts, 'distance', 10, 50).onChange(()=>{ setUpC(); draw(); })
-      // gui.add(opts, 'lineWidth', 1, 50).onChange(()=>{ setUpC(); draw(); })
-      // gui.add(opts, 'opacity', 0, 1).onChange(()=>{ setUpC(); draw(); });
-      // gui.add(opts, 'animFrameCount', 1, 100).onChange(draw);
+  let cGrids = [], dGrids = []
 
-      noCanvas()
+  function setup() {
+    frameRate(18)
+    // let gui = new dat.GUI()
+    // // gui.add(opts, 'startRot', 0, 6.28).step(0.01).onChange(()=>{ setUpC(); draw(); });
+    // gui.add(opts, 'ampl', 10, 100).onChange(()=>{ setUpC(); draw(); })
+    // gui.add(opts, 'distance', 10, 50).onChange(()=>{ setUpC(); draw(); })
+    // gui.add(opts, 'lineWidth', 1, 50).onChange(()=>{ setUpC(); draw(); })
+    // gui.add(opts, 'opacity', 0, 1).onChange(()=>{ setUpC(); draw(); });
+    // gui.add(opts, 'animFrameCount', 1, 100).onChange(draw);
 
-      mouseX = cx, mouseY = cy
+    noCanvas()
 
-      for(let x = 0; x < cols; x++) {
-        cGrids[x] = [], dGrids[x] = []
-        for(let y = 0; y < rows; y++) {
-          cGrids[x][y] = 0.0, dGrids[x][y] = 0.0
-        }
+    mouseX = cx, mouseY = cy
+
+    for(let x = 0; x < cols; x++) {
+      cGrids[x] = [], dGrids[x] = []
+      for(let y = 0; y < rows; y++) {
+        cGrids[x][y] = 0.0, dGrids[x][y] = 0.0
       }
-
-      let yOffset = 0
-      for (let y = 0; y < rows; y++) {
-        let xOffset = 0
-        for (let x = 0; x < cols; x++) {
-          cGrids[x][y] = [
-            (x * xRange)-cw*1.5, 
-            sin(yOffset/3 + xOffset) * sin(yOffset) * opts.ampl * 1 + (y * opts.distance - ch*1.5)
-          ]
-          dGrids[x][y] = [
-            (x * xRange)-cw*1.5, 
-            sin(yOffset/8 + xOffset) * sin(yOffset) * opts.ampl * 0.9 + (y * opts.distance - ch*1.5)
-          ]
-          xOffset += .01
-        }
-        yOffset += .1
-      }
-
-      setUpC()
     }
 
-    function draw() {
+    let yOffset = 0
+    for (let y = 0; y < rows; y++) {
+      let xOffset = 0
+      for (let x = 0; x < cols; x++) {
+        cGrids[x][y] = [
+          (x * xRange)-cw*1.5, 
+          sin(yOffset/3 + xOffset) * sin(yOffset) * opts.ampl * 1 + (y * opts.distance - ch*1.5)
+        ]
+        dGrids[x][y] = [
+          (x * xRange)-cw*1.5, 
+          sin(yOffset/8 + xOffset) * sin(yOffset) * opts.ampl * 0.9 + (y * opts.distance - ch*1.5)
+        ]
+        xOffset += .01
+      }
+      yOffset += .1
+    }
+
+    setUpC()
+  }
+
+  function draw() {
+    
+    dtx.lineWidth = opts.lineWidth
+
+    dgrad = dtx.createLinearGradient(-cw/2, ch/2, cw/2, -ch/2)
+    dgrad.addColorStop(0, "rgba(60, 10, 10, 0.9)")
+    dgrad.addColorStop(0.3, `rgba(0, 0, 0, ${opts.opacity})`)
+    dgrad.addColorStop(0.7, `rgba(0, 0, 0, ${opts.opacity})`)
+    dgrad.addColorStop(1, "rgba(10, 10, 60, 0.9)")
+    dtx.strokeStyle = dgrad
+
+
+    const counter = frameCount / opts.animFrameCount
+    // ctx.clearRect(-cw, -ch, 2*cw, 2*ch)
+    dtx.clearRect(-cw, -ch, 2*cw, 2*ch)
+
+    let dx = mouseX - tx
+    tx += dx * easing
+    let dy = mouseY - ty
+    ty += dy * easing
+    // cSinLine()
+    // dSineLine(counter)
+    dSineLines(counter)
+  }
+
+  function setUpC() {
+    ctx.clearRect(-cw, -ch, 2*cw, 2*ch)
+    ctx.lineWidth = opts.lineWidth
+    grad = ctx.createLinearGradient(-cw/2, ch/2, cw/2, -ch/2)
+    grad.addColorStop(0, "rgba(60, 10, 10, 0.9)")
+    grad.addColorStop(0.3, `rgba(0, 0, 0, ${opts.opacity})`)
+    grad.addColorStop(0.7, `rgba(0, 0, 0, ${opts.opacity})`)
+    grad.addColorStop(1, "rgba(10, 10, 60, 0.9)")
+    ctx.strokeStyle = grad
+    cSineLines()
+  }
+
+  function sineLines(offset) {
+    let yOffset = 0
+    for(let y = 0; y < rows; y++) {
+      let xOffset = 0
+      ctx.save()
+      dtx.save()
+
+      ctx.translate(cx, cy)
+      dtx.translate(cx + (tx - cx)/5 , cy + (ty - cy)/5)
+      dtx.rotate(offset/2+ opts.startRot + (tx - cx)/(cw * 3))
       
-      dtx.lineWidth = opts.lineWidth
-
-      dgrad = dtx.createLinearGradient(-cw/2, ch/2, cw/2, -ch/2)
-      dgrad.addColorStop(0, "rgba(60, 10, 10, 0.9)")
-      dgrad.addColorStop(0.3, `rgba(0, 0, 0, ${opts.opacity})`)
-      dgrad.addColorStop(0.7, `rgba(0, 0, 0, ${opts.opacity})`)
-      dgrad.addColorStop(1, "rgba(10, 10, 60, 0.9)")
-      dtx.strokeStyle = dgrad
-
-
-      const counter = frameCount / opts.animFrameCount
-      // ctx.clearRect(-cw, -ch, 2*cw, 2*ch)
-      dtx.clearRect(-cw, -ch, 2*cw, 2*ch)
-
-      let dx = mouseX - tx
-      tx += dx * easing
-      let dy = mouseY - ty
-      ty += dy * easing
-      // cSinLine()
-      // dSineLine(counter)
-      // dSineLines(counter)
-    }
-
-    function setUpC() {
-      ctx.clearRect(-cw, -ch, 2*cw, 2*ch)
-      ctx.lineWidth = opts.lineWidth
-      grad = ctx.createLinearGradient(-cw/2, ch/2, cw/2, -ch/2)
-      grad.addColorStop(0, "rgba(60, 10, 10, 0.9)")
-      grad.addColorStop(0.3, `rgba(0, 0, 0, ${opts.opacity})`)
-      grad.addColorStop(0.7, `rgba(0, 0, 0, ${opts.opacity})`)
-      grad.addColorStop(1, "rgba(10, 10, 60, 0.9)")
-      ctx.strokeStyle = grad
-      cSineLines()
-    }
-
-    function sineLines(offset) {
-      let yOffset = 0
-      for(let y = 0; y < rows; y++) {
-        let xOffset = 0
-        ctx.save()
-        dtx.save()
-
-        ctx.translate(cx, cy)
-        dtx.translate(cx + (tx - cx)/5 , cy + (ty - cy)/5)
-        dtx.rotate(offset/2+ opts.startRot + (tx - cx)/(cw * 3))
-        
-        ctx.beginPath()
-        dtx.beginPath()
-        for(let x = 0; x < cols; x++) {
-          ctx.lineTo(cGrids[x][y][0], cGrids[x][y][1])
-          dtx.lineTo(dGrids[x][y][0], dGrids[x][y][1])
-          xOffset += .01
-        }
-        ctx.stroke()
-        dtx.stroke()
-
-        ctx.restore()
-        dtx.restore()
-
-        yOffset += .1
+      ctx.beginPath()
+      dtx.beginPath()
+      for(let x = 0; x < cols; x++) {
+        ctx.lineTo(cGrids[x][y][0], cGrids[x][y][1])
+        dtx.lineTo(dGrids[x][y][0], dGrids[x][y][1])
+        xOffset += .01
       }
+      ctx.stroke()
+      dtx.stroke()
+
+      ctx.restore()
+      dtx.restore()
+
+      yOffset += .1
     }
+  }
 
-    function cSineLines() {
-      let yOffset = 0
-      for(let y = 0; y < rows; y++) {
-        let xOffset = 0
-        ctx.save()
-        // ctx.translate(cx * 2/3, cy * 2/3)
-        ctx.translate(cx, cy)
-        ctx.scale(0.95, 0.95)
-        ctx.beginPath()
-        for(let x = 0; x < cols; x++) {
-          ctx.lineTo(cGrids[x][y][0], cGrids[x][y][1])
-          xOffset += .01
-        }
-        ctx.stroke()
-
-        ctx.restore()
-
-        yOffset += .1
+  function cSineLines() {
+    let yOffset = 0
+    for(let y = 0; y < rows; y++) {
+      let xOffset = 0
+      ctx.save()
+      // ctx.translate(cx * 2/3, cy * 2/3)
+      ctx.translate(cx, cy)
+      ctx.scale(0.95, 0.95)
+      ctx.beginPath()
+      for(let x = 0; x < cols; x++) {
+        ctx.lineTo(cGrids[x][y][0], cGrids[x][y][1])
+        xOffset += .01
       }
+      ctx.stroke()
+
+      ctx.restore()
+
+      yOffset += .1
     }
+  }
 
-    function dSineLines(offset) {
-      let yOffset = 0
-      for(let y = 0; y < rows; y++) {
-        let xOffset = 0
-        dtx.save()
-        dtx.translate(cx + (tx-cx)/6, cy + (ty-cy)/6)
+  function dSineLines(offset) {
+    let yOffset = 0
+    for(let y = 0; y < rows; y++) {
+      let xOffset = 0
+      dtx.save()
+      dtx.translate(cx + (tx-cx)/6, cy + (ty-cy)/6)
 
-        // dtx.rotate(1)
-        dtx.rotate(offset/2 + opts.startRot + (tx - cx*1.8)/(cw * 2))
-        dtx.scale(0.95, 0.95)
-        dtx.beginPath()
-        for(let x = 0; x < cols; x++) {
-          dtx.lineTo(dGrids[x][y][0], dGrids[x][y][1])
-          xOffset += .01
-        }
-        dtx.stroke()
-        
-        dtx.restore()
-
-        yOffset += .1
+      // dtx.rotate(1)
+      dtx.rotate(offset/2 + opts.startRot + (tx - cx*1.8)/(cw * 2))
+      dtx.scale(0.95, 0.95)
+      dtx.beginPath()
+      for(let x = 0; x < cols; x++) {
+        dtx.lineTo(dGrids[x][y][0], dGrids[x][y][1])
+        xOffset += .01
       }
+      dtx.stroke()
+      
+      dtx.restore()
+
+      yOffset += .1
     }
-  </script>
+  }
+</script>

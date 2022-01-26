@@ -1,4 +1,7 @@
-import * as THREE from 'three'
+// import * as THREE from 'three'
+// import gsap from 'gsap'
+
+const patternFileName = 'pattern-2.png'
 
 class Sketch {
   constructor() {
@@ -9,10 +12,11 @@ class Sketch {
 
     this.width = this.container.offsetWidth
     this.height = this.container.offsetHeight
+    this.planeSize = Math.pow(Math.pow(this.width, 2) + Math.pow(this.height, 2), 0.5) * 1.2
 
-    this.camera = new THREE.PerspectiveCamera(70, this.width/this.height, 100, 4000)
-    this.camera.position.z = 600
-    this.camera.fov = 2*Math.atan( (this.height/2)/600 )* (180/Math.PI)
+    this.camera = new THREE.OrthographicCamera( - this.width / 2, this.width / 2, this.height / 2, - this.height / 2, 0, 3 * this.planeSize );
+
+    this.camera.position.z = this.planeSize
 
     this.renderer = new THREE.WebGLRenderer({ 
       antialias: true,
@@ -23,7 +27,13 @@ class Sketch {
 
     this.settings()
     
-    this.mouse = { x: 0, y: 0 }
+    this.mouse = new THREE.Vector2(0, 0)
+    this.tx = 0
+    this.ty = 0
+    this.easing = 0.03
+    this.raycaster = new THREE.Raycaster()
+    this.initEventListener() 
+
     // this.addCursor()
     this.addObjects()
    
@@ -31,22 +41,48 @@ class Sketch {
     this.render()     
   }
 
+  initEventListener() {
+    window.addEventListener('mousemove', e => this.onMouseMove(e) )
+  }
+
+  onMouseMove(e) {
+    this.mouse = {
+      x: e.clientX - this.width/2,
+      y: - e.clientY + this.height/2
+    }
+
+    const offsePart = 5
+    const dx = this.mouse.x/offsePart - this.tx
+    this.tx += dx * this.easing
+    const dy = this.mouse.y/offsePart - this.ty
+    this.ty += dy * this.easing
+    gsap.to(
+      this.cover2.position, 
+      1, 
+      {
+        x: this.tx,
+        y: this.ty,
+        z: this.cover2.position.z
+      }
+    )
+  }
+
   settings() {
-    // this.settings = {
-    //   velo: 0,
-    //   scale: 0,
-    //   colorful: ()=>{
-    //     // that.makeColorful()
-    //     that.customPass.uniforms.uType.value = 0;
-    //   },
-    //   zoom: ()=>{
-    //     that.customPass.uniforms.uType.value = 1;
-    //   },
-    //   random: ()=>{
-    //     that.customPass.uniforms.uType.value = 2;
-    //   },
-    // };
-    // this.gui = new dat.GUI()
+    this.settings = {
+      // velo: 0,
+      // scale: 0,
+      // colorful: ()=>{
+      //   // that.makeColorful()
+      //   that.customPass.uniforms.uType.value = 0;
+      // },
+      // zoom: ()=>{
+      //   that.customPass.uniforms.uType.value = 1;
+      // },
+      // random: ()=>{
+      //   that.customPass.uniforms.uType.value = 2;
+      // },
+    };
+    this.gui = new dat.GUI()
     // this.gui.add(this.settings, "progress", -1, 2, 0.01);
     // this.gui.add(this.settings, "velo", 0, 1, 0.01);
     // this.gui.add(this.settings, "scale", 0, 1, 0.01);
@@ -65,25 +101,27 @@ class Sketch {
     this.height = this.container.offsetHeight
 
     this.renderer.setSize(this.width, this.height)
-    this.camera.aspect = this.width / this.height
-    this.camera.updateProjectionMatrix()
+    // this.camera.aspect = this.width / this.height
+    // this.camera.updateProjectionMatrix()
   }
 
   addObjects () {
-    let texture = new THREE.TextureLoader().load('../../assets/images/pattern-2.png');
-    texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-    texture.repeat.set(1, 1);
+    let texture = new THREE.TextureLoader().load(`../../assets/images/${patternFileName}`)
+    texture.wrapS = texture.wrapT = THREE.RepeatWrapping
+    texture.repeat.set(1, 1)
     this.material = new THREE.MeshBasicMaterial({
       map: texture, 
-      side: THREE.DoubleSide,
+      // alphaTest: 0.5,
+      // side: THREE.DoubleSide,
       transparent: true
       // wireframe: true
     })
-    const planeSize = Math.pow(Math.pow(this.width, 2) + Math.pow(this.height, 2), 0.5)
-    const planeGeometry = new THREE.PlaneBufferGeometry(planeSize, planeSize, 1, 1)
+    
+    const planeGeometry = new THREE.PlaneBufferGeometry(this.planeSize, this.planeSize, 1, 1)
 		
     this.cover1 = new THREE.Mesh(planeGeometry, this.material)
     this.cover2 = new THREE.Mesh(planeGeometry, this.material)
+    this.cover2.position.z = - this.planeSize
     // this.cover1.rotation.y = 200
     // this.cover2.rotation.z = Math.PI / 2
     this.scene.add(this.cover1)
@@ -102,6 +140,12 @@ class Sketch {
     // this.objectsMaterial.uniforms.time.value = this.time
     // this.objectsMaterial.opacity = 0.5
     // this.objectsMaterial2.uniforms.time.value = this.time
+
+    this.raycaster.setFromCamera(this.mouse, this.camera)
+    this.intersects
+
+
+
     this.renderer.render( this.scene, this.camera )
     window.requestAnimationFrame(this.render.bind(this))
     // stats.end()
