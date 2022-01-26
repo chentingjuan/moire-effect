@@ -1,7 +1,8 @@
 // import * as THREE from 'three'
+// import * as dat from 'dat.gui'
 // import gsap from 'gsap'
 
-const patternFileName = 'pattern-3.png'
+const patternFileName = 'pattern-4.png'
 
 class Sketch {
   constructor() {
@@ -14,7 +15,7 @@ class Sketch {
     this.height = this.container.offsetHeight
     this.planeSize = Math.pow(Math.pow(this.width, 2) + Math.pow(this.height, 2), 0.5) * 1.2
 
-    this.camera = new THREE.OrthographicCamera( - this.width / 2, this.width / 2, this.height / 2, - this.height / 2, 0, 3 * this.planeSize );
+    this.camera = new THREE.OrthographicCamera( - this.width / 2, this.width / 2, this.height / 2, - this.height / 2, 0, 3 * this.planeSize);
 
     this.camera.position.z = this.planeSize
 
