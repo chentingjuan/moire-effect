@@ -1,7 +1,7 @@
 // import * as THREE from 'three'
 // import gsap from 'gsap'
 
-const patternFileName = 'pattern-2.png'
+const patternFileName = 'pattern-3.png'
 
 class Sketch {
   constructor() {
