@@ -117,6 +117,7 @@ class Sketch {
       transparent: true
       // wireframe: true
     })
+    this.material.map.minFilter = THREE.LinearFilter
     
     const planeGeometry = new THREE.PlaneBufferGeometry(this.planeSize, this.planeSize, 1, 1)
 		
@@ -148,6 +149,7 @@ class Sketch {
 
 
     this.renderer.render( this.scene, this.camera )
+    this.renderer.setPixelRatio(window.devicePixelRatio)
     window.requestAnimationFrame(this.render.bind(this))
     // stats.end()
   }
