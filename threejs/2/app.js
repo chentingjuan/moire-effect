@@ -1,6 +1,6 @@
-import * as THREE from 'three'
-import * as dat from 'dat.gui'
-import gsap from 'gsap'
+// import * as THREE from 'three'
+// import * as dat from 'dat.gui'
+// import gsap from 'gsap'
 
 class Sketch {
   constructor() {
