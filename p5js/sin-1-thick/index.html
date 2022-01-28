@@ -4,12 +4,15 @@
     <title>Moire Effect</title>
     <script src="../../resources/dat.gui.min.js"></script>
     <script src="../../resources/p5.min.js"></script>
-
+    <script src="../../resources/reimg.js"></script>
     <link rel="stylesheet" href="./main.css">
   </head>
 
   <body>
+    <a id="dl" href="#" onclick="dlCanvas()">Download Canvas</a>
+  
     <div class="wrapper">
+      
       <canvas id="c"></canvas>
       <canvas id="d"></canvas>
       <!-- <h1>Moiré effect is everywhere.</h1> -->
@@ -19,11 +22,11 @@
 
   <script>
     let opts = {
-      rot: 2.8,
-      ampl: 40,
+      rot: 3.1,
+      ampl: 41,
       lineWidth: 26,
       distance: 30,
-      opacity: 0.9,
+      opacity: 1,
       animFrameCount: 100,
     }
     let canvas = document.getElementById("c"), ctx = canvas.getContext("2d")
@@ -119,6 +122,10 @@
         // ctx.restore();
         dtx.restore()
       }
+    }
+
+    function dlCanvas() {
+      ReImg.fromCanvas(danvas).downloadPng()
     }
   </script>
 </html>

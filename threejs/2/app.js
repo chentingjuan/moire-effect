@@ -1,8 +1,6 @@
-// import * as THREE from 'three'
-// import * as dat from 'dat.gui'
-// import gsap from 'gsap'
-
-const patternFileName = 'pattern-3.png'
+import * as THREE from 'three'
+import * as dat from 'dat.gui'
+import gsap from 'gsap'
 
 class Sketch {
   constructor() {
@@ -82,16 +80,81 @@ class Sketch {
       // random: ()=>{
       //   that.customPass.uniforms.uType.value = 2;
       // },
+      'selected-1': 'a',
+      'filename 1': 'default',
+      '✿ CLICK ME TO UPLOAD 1': () => {
+        const input = document.getElementById('pattern-1')
+        input.addEventListener('change', () => {
+          const file = input.files[0]
+          this.settings['pattern-1'] = file.name
+
+          const image = document.createElement('img')
+          var reader = new FileReader()
+
+          reader.onload = e => {
+            const url = e.target.result
+            image.src = url
+            this.cover1.material.map = new THREE.ImageUtils.loadTexture(url)
+          };
+
+          reader.readAsDataURL(file)
+        })
+        input.click()
+      },
+      'selected-2': 'a',
+      'filename 2': 'default',
+      '✿ CLICK ME TO UPLOAD 2': () => {
+        const input = document.getElementById('pattern-2')
+        input.addEventListener('change', () => {
+          const file = input.files[0]
+          this.settings['pattern-2'] = file.name
+
+          const image = document.createElement('img')
+          var reader = new FileReader()
+
+          reader.onload = e => {
+            const url = e.target.result
+            image.src = url
+            this.cover2.material.map = new THREE.ImageUtils.loadTexture(url)
+          };
+
+          reader.readAsDataURL(file)
+        })
+        input.click()
+      },
+      // 'background': 'radial-gradient(circle, rgba(202,123,74,1) 0%, rgba(180,207,62,1) 100%)'
+      'background': '#ddd'
     };
     this.gui = new dat.GUI()
-    // this.gui.add(this.settings, "progress", -1, 2, 0.01);
-    // this.gui.add(this.settings, "velo", 0, 1, 0.01);
-    // this.gui.add(this.settings, "scale", 0, 1, 0.01);
-    // this.gui.add(this.settings, "colorful");
-    // this.gui.add(this.settings, "zoom");
-    // this.gui.add(this.settings, "random");
-  }
 
+    const patter1Folder = this.gui.addFolder('----- PATTERN 1 -----')
+    patter1Folder.open()
+    patter1Folder.add(this.settings, 'selected-1', {'a': 'a','b': 'b','c': 'c'}).onChange(() => {
+      this.cover1.material.map = new THREE.TextureLoader().load(`../../assets/images/pattern-${this.settings['selected-1']}.png`)
+    })
+
+    const patter1FolderUpload = patter1Folder.addFolder('Upload Image')
+    patter1FolderUpload.open()
+    patter1FolderUpload.add(this.settings, '✿ CLICK ME TO UPLOAD 1')
+    patter1FolderUpload.add(this.settings, 'filename 1', this.settings['pattern-1']).listen()
+    
+    const patter2Folder = this.gui.addFolder('----- PATTERN 2 -----')
+    patter2Folder.open()
+    patter2Folder.add(this.settings, 'selected-2', {'a': 'a','b': 'b','c': 'c'}).onChange(() => {
+      this.cover2.material.map = new THREE.TextureLoader().load(`../../assets/images/pattern-${this.settings['selected-2']}.png`)
+    })
+
+    const patter2FolderUpload = patter2Folder.addFolder('Upload Image')
+    patter2FolderUpload.open()
+    patter2FolderUpload.add(this.settings, '✿ CLICK ME TO UPLOAD 2')
+    patter2FolderUpload.add(this.settings, 'filename 2', this.settings['pattern-2']).listen()
+
+    document.querySelector('body').style.background = this.settings['background']
+    this.gui.add(this.settings, 'background').onChange(() => {
+      document.querySelector('body').style.background = this.settings['background']
+    })
+  }
+  
   setupResize() {
     this.resize()
     window.addEventListener('resize', this.resize.bind(this))
@@ -102,27 +165,23 @@ class Sketch {
     this.height = this.container.offsetHeight
 
     this.renderer.setSize(this.width, this.height)
-    // this.camera.aspect = this.width / this.height
-    // this.camera.updateProjectionMatrix()
   }
 
   addObjects () {
-    let texture = new THREE.TextureLoader().load(`../../assets/images/${patternFileName}`)
+    let texture = new THREE.TextureLoader().load(`../../assets/images/pattern-${this.settings['selected-1']}.png`)
     texture.wrapS = texture.wrapT = THREE.RepeatWrapping
     texture.repeat.set(1, 1)
-    this.material = new THREE.MeshBasicMaterial({
-      map: texture, 
-      // alphaTest: 0.5,
-      // side: THREE.DoubleSide,
-      transparent: true
-      // wireframe: true
-    })
-    this.material.map.minFilter = THREE.LinearFilter
-    
+    this.material1 = new THREE.MeshBasicMaterial({map: texture, transparent: true})
+    this.material1.map.minFilter = THREE.LinearFilter
+    this.material1.map.needsUpdate = true
+    this.material2 = new THREE.MeshBasicMaterial({map: texture, transparent: true})
+    this.material2.map.minFilter = THREE.LinearFilter
+    this.material2.map.needsUpdate = true
+
     const planeGeometry = new THREE.PlaneBufferGeometry(this.planeSize, this.planeSize, 1, 1)
 		
-    this.cover1 = new THREE.Mesh(planeGeometry, this.material)
-    this.cover2 = new THREE.Mesh(planeGeometry, this.material)
+    this.cover1 = new THREE.Mesh(planeGeometry, this.material1)
+    this.cover2 = new THREE.Mesh(planeGeometry, this.material2)
     this.cover2.position.z = - this.planeSize
     // this.cover1.rotation.y = 200
     // this.cover2.rotation.z = Math.PI / 2
@@ -158,3 +217,4 @@ class Sketch {
 window.onload = () => {
   new Sketch()
 }
+

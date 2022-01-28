@@ -32,3 +32,7 @@ img {
   width: 250px;
   height: auto;
 }
+
+.cr.function .property-name {
+  width: 100%;
+}

@@ -36,3 +36,10 @@ img {
 .dg.ac {
   z-index: 2;
 }
+
+a#dl {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 999;
+}

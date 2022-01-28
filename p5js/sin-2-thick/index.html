@@ -4,11 +4,13 @@
     <title>Moire Effect</title>
     <script src="../../resources/dat.gui.min.js"></script>
     <script src="../../resources/p5.min.js"></script>
-
+    <script src="../../resources/reimg.js"></script>
     <link rel="stylesheet" href="./main.css">
   </head>
 
   <body>
+    <a id="dl" href="#" onclick="dlCanvas()">Download Canvas</a>
+    
     <div class="wrapper">
       <canvas id="c" style="opacity: 1;"></canvas>
       <canvas id="d" style="opacity: 1;"></canvas>
@@ -20,12 +22,12 @@
 
 <script>
   let opts = {
-    startRot: 2.8,
-    ampl: 45,
-    // ampl: 57,
-    // lineWidth: 28,
-    lineWidth: 30,
-    distance: 32,
+    startRot: 2,
+    // ampl: 45,
+    ampl: 57,
+    lineWidth: 26,
+    // lineWidth: 30,
+    distance: 26,
     // distance: 26,
     opacity: 1,
     animFrameCount: 100,
@@ -196,5 +198,9 @@
 
       yOffset += .1
     }
+  }
+
+  function dlCanvas() {
+    ReImg.fromCanvas(danvas).downloadPng()
   }
 </script>
