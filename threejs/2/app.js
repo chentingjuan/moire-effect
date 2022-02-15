@@ -1,6 +1,6 @@
-// import * as THREE from 'three'
-// import * as dat from 'dat.gui'
-// import gsap from 'gsap'
+import * as THREE from 'three'
+import * as dat from 'dat.gui'
+import gsap from 'gsap'
 // import { Effect } from "postprocessing"
 
 class Sketch {
@@ -347,7 +347,7 @@ class WaterTexture {
     if (options.debug) {
       this.width = window.innerWidth
       this.height = window.innerHeight
-      this.radius = this.width * 0.25
+      this.radius = this.width * 0.1
     }
 
     this.initTexture()
@@ -412,8 +412,9 @@ class WaterTexture {
     const ctx = this.ctx
 
     let intensity = 1
-    intensity = easeOutSine((1 - point.age / this.maxAge), 0, 1, 1)
-  
+    // intensity = easeOutSine((1 - point.age / this.maxAge), 0, 1, 1)
+    intensity = (1 - point.age / this.maxAge)
+
     let color = "255,255,255";
 
     let offset = this.width * 1;
@@ -421,7 +422,7 @@ class WaterTexture {
     ctx.shadowOffsetX = offset;
     ctx.shadowOffsetY = offset;
     ctx.shadowBlur = radius * 5;
-    ctx.shadowColor = `rgba(${color}, ${1 * intensity})`;
+    ctx.shadowColor = `rgba(${color}, ${.8})`;
 
     this.ctx.beginPath();
     this.ctx.fillStyle = `rgba(255,0,0,1)`;
