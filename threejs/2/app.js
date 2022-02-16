@@ -1,6 +1,6 @@
-import * as THREE from 'three'
-import * as dat from 'dat.gui'
-import gsap from 'gsap'
+// import * as THREE from 'three'
+// import * as dat from 'dat.gui'
+// import gsap from 'gsap'
 // import { Effect } from "postprocessing"
 
 class Sketch {
@@ -27,12 +27,11 @@ class Sketch {
 
     this.settings()
     
-    // this.currentWave = 0
     this.mouse = new THREE.Vector2(0, 0)
     this.tx = 0
     this.ty = 0
     this.easing = 0.03
-    this.raycaster = new THREE.Raycaster()
+    // this.raycaster = new THREE.Raycaster()
     this.waterTexture = new WaterTexture({ debug: true })
     this.initEventListener() 
 
@@ -43,7 +42,13 @@ class Sketch {
   }
 
   initEventListener() {
-    window.addEventListener('mousemove', e => this.onMouseMove(e) )
+    window.addEventListener('mousemove', this.onMouseMove)
+    window.addEventListener("touchmove", this.onTouchMove)
+  }
+  
+  onTouchMove(e) {
+    const touch = e.targetTouches[0]
+    this.onMouseMove({ clientX: touch.clientX, clientY: touch.clientY })
   }
 
   onMouseMove(e) {
@@ -225,15 +230,7 @@ class Sketch {
   }
 
   addObjects () {
-    // const m = new THREE.MeshBasicMaterial({
-    //   map: this.waterTexture.texture,
-    //   transparent: true,
-    //   blending: THREE.AdditiveBlending,
-    //   depthTest: false,
-    //   depthWrite: false,
-    // })
-    // // m.visible = false
-    // this.scene1.add(new THREE.Mesh(new THREE.PlaneBufferGeometry(this.width, this.height, 1, 1), m))
+  
 
     let texture = new THREE.TextureLoader().load(`../../assets/images/pattern-${this.settings['selected-1']}.png`)
     texture.wrapS = texture.wrapT = THREE.RepeatWrapping
