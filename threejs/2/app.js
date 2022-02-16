@@ -1,7 +1,5 @@
-// import * as THREE from 'three'
-// import * as dat from 'dat.gui'
-// import gsap from 'gsap'
-// import { Effect } from "postprocessing"
+import * as THREE from 'three'
+import * as dat from 'dat.gui'
 
 class Sketch {
   constructor() {
@@ -24,7 +22,8 @@ class Sketch {
     })
     
     this.container.appendChild(this.renderer.domElement)
-
+    this.waterTexture = new WaterTexture({ debug: true })
+    console.log(this.waterTexture)
     this.settings()
     
     this.mouse = new THREE.Vector2(0, 0)
@@ -32,18 +31,19 @@ class Sketch {
     this.ty = 0
     this.easing = 0.03
     // this.raycaster = new THREE.Raycaster()
-    this.waterTexture = new WaterTexture({ debug: true })
-    this.initEventListener() 
+    
+    
 
     this.addObjects()
-   
+    this.initEventListener() 
+
     this.setupResize()
     this.render()     
   }
 
   initEventListener() {
-    window.addEventListener('mousemove', this.onMouseMove)
-    window.addEventListener("touchmove", this.onTouchMove)
+    window.addEventListener('mousemove', e => this.onMouseMove(e))
+    window.addEventListener("touchmove", e => this.onTouchMove(e))
   }
   
   onTouchMove(e) {
@@ -52,7 +52,8 @@ class Sketch {
   }
 
   onMouseMove(e) {
-    this.waterTexture.update()
+    e.preventDefault()
+    
     // // this.mouse = {
     // //   x: e.clientX - this.width/2,
     // //   y: - e.clientY + this.height/2
@@ -123,6 +124,7 @@ class Sketch {
     //   },
     //   this.camera
     // );
+    this.waterTexture.update()
   }
 
   settings() {
@@ -348,14 +350,14 @@ class WaterTexture {
     }
 
     this.initTexture()
-    if (options.debug) document.body.append(this.canvas);
+    if (options.debug) document.body.append(this.canvas)
   }
 
   initTexture() {
-    this.canvas = document.createElement("canvas");
-    this.canvas.id = "WaterTexture";
-    this.canvas.width = this.width;
-    this.canvas.height = this.height;
+    this.canvas = document.createElement("canvas")
+    this.canvas.id = "WaterTexture"
+    this.canvas.width = this.width
+    this.canvas.height = this.height
     this.canvas.style.position = 'fixed'
     this.canvas.style.left = 0
     this.canvas.style.top = 0
@@ -365,21 +367,21 @@ class WaterTexture {
     this.canvas.style.opacity = 0
     this.canvas.style.pointerEvents = 'none'
     this.ctx = this.canvas.getContext("2d")
-    this.clear();
+    this.clear()
 
     this.texture = new THREE.Texture(this.canvas) 
-    this.texture.needsUpdate = true;
+    this.texture.needsUpdate = true
   }
   clear() {
-    this.ctx.fillStyle = "black";
-    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.fillStyle = "black"
+    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
   }
   addPoint(point) {
     let force = 0;
     let vx = 0;
     let vy = 0;
  
-    this.points.push({ x: point.x, y: point.y, age: 0, force, vx, vy });
+    this.points.push({ x: point.x, y: point.y, age: 0, force, vx, vy })
   }
   update() {
     this.clear()
