@@ -22,20 +22,21 @@ class Sketch {
     })
     
     this.container.appendChild(this.renderer.domElement)
-    this.waterTexture = new WaterTexture({ debug: true })
-    console.log(this.waterTexture)
+    
     this.settings()
     
+    this.waterTexture = new WaterTexture({ debug: true })
+
     this.mouse = new THREE.Vector2(0, 0)
     this.tx = 0
     this.ty = 0
     this.easing = 0.03
     // this.raycaster = new THREE.Raycaster()
     
-    
+    this.initEventListener() 
 
     this.addObjects()
-    this.initEventListener() 
+    
 
     this.setupResize()
     this.render()     
@@ -51,9 +52,8 @@ class Sketch {
     this.onMouseMove({ clientX: touch.clientX, clientY: touch.clientY })
   }
 
-  onMouseMove(e) {
-    e.preventDefault()
-    
+  onMouseMove(e) {  
+    this.waterTexture.update()  
     // // this.mouse = {
     // //   x: e.clientX - this.width/2,
     // //   y: - e.clientY + this.height/2
@@ -124,7 +124,7 @@ class Sketch {
     //   },
     //   this.camera
     // );
-    this.waterTexture.update()
+    
   }
 
   settings() {
