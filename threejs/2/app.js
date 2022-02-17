@@ -1,5 +1,5 @@
-// import * as THREE from 'three'
-// import * as dat from 'dat.gui'
+import * as THREE from 'three'
+import * as dat from 'dat.gui'
 
 class Sketch {
   constructor() {
@@ -129,18 +129,6 @@ class Sketch {
 
   settings() {
     this.settings = {
-      // velo: 0,
-      // scale: 0,
-      // colorful: ()=>{
-      //   // that.makeColorful()
-      //   that.customPass.uniforms.uType.value = 0;
-      // },
-      // zoom: ()=>{
-      //   that.customPass.uniforms.uType.value = 1;
-      // },
-      // random: ()=>{
-      //   that.customPass.uniforms.uType.value = 2;
-      // },
       'selected-1': 'a',
       'filename 1': 'default',
       '✿ CLICK ME TO UPLOAD 1': () => {
@@ -299,24 +287,9 @@ class Sketch {
     this.time += 0.001
 
     this.cover2.rotation.z = this.time * this.settings['rot-velocity'] / 10
-    // this.scroll.render()
-    // this.currentScroll = this.scroll.scrollToRender
-   
-    // this.objectsMaterial.uniforms.time.value = this.time
-    // this.objectsMaterial.opacity = 0.5
-    // this.objectsMaterial2.uniforms.time.value = this.time
-
-    // if(this.waterTexture.points.length!==0) this.waterTexture.update()
-
-
-    // this.renderer.setRenderTarget(this.baseTexture)
-    // this.renderer.render( this.scene1, this.camera )
-    // this.material1.uniforms.u_displacement.value = this.baseTexture.texture
-    // this.renderer.setRenderTarget(null)
-    // this.renderer.clear()
+    
     this.renderer.render(this.scene, this.camera)
 
-    // this.renderer.setPixelRatio(window.devicePixelRatio)
     window.requestAnimationFrame(this.render.bind(this))
     // stats.end()
   }
@@ -364,7 +337,7 @@ class WaterTexture {
     this.canvas.style.right = 0
     this.canvas.style.bottom = 0
     this.canvas.style.zIndex = 999
-    this.canvas.style.opacity = 0.1
+    this.canvas.style.opacity = 0
     this.canvas.style.pointerEvents = 'none'
     this.ctx = this.canvas.getContext("2d")
     this.clear()
@@ -402,7 +375,6 @@ class WaterTexture {
     this.texture.needsUpdate = true
   }
   drawPoint(point) {
-    // Convert normalized position into canvas coordinates
     let pos = {
       x: point.x * this.width,
       y: point.y * this.height
@@ -410,18 +382,12 @@ class WaterTexture {
     const radius = this.radius
     const ctx = this.ctx
 
-    let intensity = 1
-    // intensity = easeOutSine((1 - point.age / this.maxAge), 0, 1, 1)
-    intensity = (1 - point.age / this.maxAge)
-
-    let color = "255,255,255";
-
-    let offset = this.width * 1;
+    let offset = this.width * 1
     // 1. Give the shadow a high offset.
-    ctx.shadowOffsetX = offset;
-    ctx.shadowOffsetY = offset;
-    ctx.shadowBlur = radius * 5;
-    ctx.shadowColor = `rgba(${color}, ${.8})`;
+    ctx.shadowOffsetX = offset
+    ctx.shadowOffsetY = offset
+    ctx.shadowBlur = radius * 2
+    ctx.shadowColor = `rgba(255, 255, 255, .8)`
 
     this.ctx.beginPath();
     this.ctx.fillStyle = `rgba(255,0,0,1)`;
