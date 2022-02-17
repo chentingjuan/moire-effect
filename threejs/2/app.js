@@ -155,7 +155,7 @@ class Sketch {
           reader.onload = e => {
             const url = e.target.result
             image.src = url
-            this.cover1.material.map = new THREE.TextureLoader(url)
+            this.cover1.material.uniforms.u_image = new THREE.Uniform(new THREE.TextureLoader(url))
           };
 
           reader.readAsDataURL(file)
@@ -183,16 +183,16 @@ class Sketch {
         })
         input.click()
       },
-      // 'background': 'radial-gradient(circle, rgba(202,123,74,1) 0%, rgba(180,207,62,1) 100%)'
-      'background': '#ddd',
-      'rot-velocity': 1,
+      'background': 'radial-gradient(circle, rgba(202,123,74,1) 0%, rgba(180,207,62,1) 100%)',
+      // 'background': '#ddd',
+      'rot-velocity': 10,
     };
     this.gui = new dat.GUI()
 
     const patter1Folder = this.gui.addFolder('----- PATTERN 1 -----')
     patter1Folder.open()
     patter1Folder.add(this.settings, 'selected-1', {'a': 'a','b': 'b','c': 'c'}).onChange(() => {
-      this.cover1.material.map = new THREE.TextureLoader().load(`../../assets/images/pattern-${this.settings['selected-1']}.png`)
+      this.cover1.material.uniforms.u_image = new THREE.Uniform(new THREE.TextureLoader().load(`../../assets/images/pattern-${this.settings['selected-1']}.png`))
     })
 
     const patter1FolderUpload = patter1Folder.addFolder('Upload Image')
@@ -216,7 +216,7 @@ class Sketch {
       document.querySelector('body').style.background = this.settings['background']
     })
 
-    this.gui.add(this.settings, 'rot-velocity').min(0.1).max(1)
+    this.gui.add(this.settings, 'rot-velocity').min(1).max(100)
   }
   
   setupResize() {
@@ -298,7 +298,7 @@ class Sketch {
     // stats.begin()
     this.time += 0.001
 
-    this.cover2.rotation.z = this.time / this.settings['rot-velocity']
+    this.cover2.rotation.z = this.time * this.settings['rot-velocity'] / 10
     // this.scroll.render()
     // this.currentScroll = this.scroll.scrollToRender
    
@@ -364,7 +364,7 @@ class WaterTexture {
     this.canvas.style.right = 0
     this.canvas.style.bottom = 0
     this.canvas.style.zIndex = 999
-    this.canvas.style.opacity = 0
+    this.canvas.style.opacity = 0.1
     this.canvas.style.pointerEvents = 'none'
     this.ctx = this.canvas.getContext("2d")
     this.clear()
